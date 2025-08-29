@@ -1,1 +1,50 @@
 
+{% schema %}
+
+{
+  "name": "Custom Banner",
+  "settings":[
+  {
+    "type" : "text",//text field for heading
+    "id" : "heading",
+    "label" : "Heading",
+    "default": "Welcome"
+  },
+  {
+    "type" : "text",//text field for sub-heading
+    "id" : "subheading",
+    "label" : "Subheading",
+    "default": "Discover our latest trends and collections"
+  },
+  {
+    "type" : "url",//button link
+    "id" : "button_link",
+    "label" : "Button Link",
+  },
+  {
+    "type" : "text",//button text
+    "id" : "button_text",
+    "label" : "Button Text",
+    "default" : "Shop now"
+  },
+  {
+    "type" : "image_picker",//upload bg for banner
+    "id" : "background",
+    "label" : "Background Image"
+  }
+],
+
+"presets" : [
+  {
+    "name": "Custom Banner" //allows addable section
+  }  
+]
+}
+{% endschema %}
+
+<!-- Banner HTML -->
+<section class= "custom-banner" style="background-image:url({{section.settings.background| image_url}});">
+  <div class="banner-content">
+    <h1>{{section.settings.heading}}</h1> //dynamic heading from editor
+    <p>{{section.settings.subheading}}</p> //dynamic subheading
+    <a href="
