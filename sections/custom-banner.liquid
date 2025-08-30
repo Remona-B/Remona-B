@@ -34,19 +34,19 @@
         <p class="desc">{{ section.settings.left_description }}</p>
       {% endif %}
 
-      <!-- Right Side Image -->
-    {% if section.settings.side_image != blank %}
-      <div class="banner-right">
-        <img src="{{ section.settings.side_image | image_url: width: 600 }}" alt="Side Banner">
-      </div>
-    {% endif %}
-    
       {% if section.settings.left_button_text != blank and section.settings.left_button_link != blank %}
         <a href="{{ section.settings.left_button_link }}" class="btn-animate">
           {{ section.settings.left_button_text }}
         </a>
       {% endif %}
     </div>
+
+    <!-- Right Side Image -->
+    {% if section.settings.side_image != blank %}
+      <div class="banner-right">
+        <img src="{{ section.settings.side_image | image_url: width: 600 }}" alt="Side Banner">
+      </div>
+    {% endif %}
   </div>
 
   <!-- Footer Text -->
