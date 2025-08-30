@@ -35,7 +35,7 @@
       {% endif %}
 
       {% if section.settings.left_button_text != blank and section.settings.left_button_link != blank %}
-        <a href="{{ section.settings.left_button_link }}" class="btn-animate" id="bottom-btn">
+        <a href="{{ section.settings.left_button_link }}" class="btn-animate">
           {{ section.settings.left_button_text }}
         </a>
       {% endif %}
@@ -207,9 +207,6 @@
   transform: scale(1.05);
 }
 
-#bottom-btn{
-  margin-top:800px;
-}
 
 /* Headings */
 .main-heading {
