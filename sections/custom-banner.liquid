@@ -1,123 +1,102 @@
-<div class="custom-banner" >
-  <div class="banner-content">
+<div class="custom-banner" style="padding: 60px 20px;">
+
+  <!-- Top banner image -->
+  {% if section.settings.top_image != blank %}
+    <div style="text-align: center; margin-bottom: 40px;">
+      <img src="{{ section.settings.top_image | image_url: width: 1200 }}" alt="Top Banner" style="max-width: 100%; height: auto;">
+    </div>
+  {% endif %}
+
+  <!-- Content with left text + right image -->
+  <div style="display: flex; align-items: center; justify-content: space-between; gap: 40px; flex-wrap: wrap;">
     
-    <!-- Top Row -->
-    <div class="banner-top">
-      <div class="brand">{{ section.settings.brand_text }}</div>
-      <div class="topline">{{ section.settings.topline_text }}</div>
-      {% if section.settings.button_text != blank %}
-        <a href="{{ section.settings.button_link }}" class="btn btn-animate">{{ section.settings.button_text }}</a>
+    <!-- Left Side: Text -->
+    <div style="flex: 1; min-width: 300px; max-width: 600px;">
+      {% if section.settings.small_text != blank %}
+        <p style="font-size: 16px; margin-bottom: 10px; font-weight: 400; color: #555;">
+          {{ section.settings.small_text }}
+        </p>
+      {% endif %}
+
+      {% if section.settings.heading != blank %}
+        <h1 style="font-size: 48px; font-weight: 700; margin-bottom: 20px;">
+          {{ section.settings.heading }}
+        </h1>
+      {% endif %}
+
+      {% if section.settings.description != blank %}
+        <p style="font-size: 18px; margin-bottom: 30px; line-height: 1.6; color: #333;">
+          {{ section.settings.description }}
+        </p>
+      {% endif %}
+
+      {% if section.settings.button_text != blank and section.settings.button_link != blank %}
+        <a href="{{ section.settings.button_link }}" 
+           style="background-color: #fce300; 
+                  padding: 12px 30px; 
+                  font-size: 16px; 
+                  font-weight: 600; 
+                  color: #000; 
+                  text-decoration: none; 
+                  border-radius: 4px;">
+          {{ section.settings.button_text }}
+        </a>
       {% endif %}
     </div>
 
-    <!-- Main Heading -->
-    <h1 class="main-heading">{{ section.settings.heading }}</h1>
-    <p class="subheading">{{ section.settings.subheading }}</p>
-
-    <!-- Bottom Button -->
-    {% if section.settings.bottom_button_text != blank %}
-      <a href="{{ section.settings.bottom_button_link }}" class="btn btn-animate">{{ section.settings.bottom_button_text }}</a>
+    <!-- Right Side: Image -->
+    {% if section.settings.side_image != blank %}
+      <div style="flex: 1; text-align: center; min-width: 300px;">
+        <img src="{{ section.settings.side_image | image_url: width: 600 }}" alt="Side Banner" style="max-width: 100%; height: auto;">
+      </div>
     {% endif %}
-
-    <!-- Side-by-side Banners -->
-    <div class="custom-banner__wrapper">
-      {% if section.settings.banner_image_1 != blank %}
-        <div class="custom-banner__image">
-          <img src="{{ section.settings.banner_image_1 | img_url: 'master' }}" alt="{{ section.settings.banner_image_1_alt | escape }}">
-        </div>
-      {% endif %}
-      {% if section.settings.banner_image_2 != blank %}
-        <div class="custom-banner__image">
-          <img src="{{ section.settings.banner_image_2 | img_url: 'master' }}" alt="{{ section.settings.banner_image_2_alt | escape }}">
-        </div>
-      {% endif %}
-    </div>
-
-    <!-- Footer Text -->
-    <div class="footer-text">{{ section.settings.footer_text }}</div>
+    
   </div>
 </div>
+
 
 {% schema %}
 {
   "name": "Custom Banner",
   "settings": [
     {
-      "type": "text",
-      "id": "brand_text",
-      "label": "Brand Text",
-      "default": "TISSO VISION"
+      "type": "image_picker",
+      "id": "top_image",
+      "label": "Top Banner Image"
     },
     {
       "type": "text",
-      "id": "topline_text",
-      "label": "Top Line Text",
+      "id": "small_text",
+      "label": "Small Text",
       "default": "Find the ideal gift for your loved ones."
     },
     {
       "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "The Gift Guide"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Discover Joy: Your Ultimate Holiday Gift Destination. Explore our curated selection and find the perfect gifts to delight your loved ones this holiday season."
+    },
+    {
+      "type": "text",
       "id": "button_text",
-      "label": "Top Right Button Text",
+      "label": "Button Text",
       "default": "CHOOSE GIFT"
     },
     {
       "type": "url",
       "id": "button_link",
-      "label": "Top Right Button Link"
-    },
-    {
-      "type": "text",
-      "id": "heading",
-      "label": "Main Heading",
-      "default": "The Gift Guide"
-    },
-    {
-      "type": "textarea",
-      "id": "subheading",
-      "label": "Subheading",
-      "default": "Discover Joy: Your Ultimate Holiday Gift Destination. Explore our curated selection and find the perfect gifts to delight your loved ones this holiday season."
-    },
-    {
-      "type": "text",
-      "id": "bottom_button_text",
-      "label": "Bottom Button Text",
-      "default": "SHOP NOW"
-    },
-    {
-      "type": "url",
-      "id": "bottom_button_link",
-      "label": "Bottom Button Link"
-    },
-    {
-      "type": "text",
-      "id": "footer_text",
-      "label": "Footer Banner Text",
-      "default": "SUSTAINABLE, ETHICALLY MADE CLOTHES IN SIZES XXS TO 6XL"
+      "label": "Button Link"
     },
     {
       "type": "image_picker",
-      "id": "background_image",
-      "label": "Background Image"
-    },
-    {
-      "type": "image_picker",
-      "id": "banner_image_1",
-      "label": "Banner Image 1"
-    },
-    {
-      "type": "text",
-      "id": "banner_image_1_alt",
-      "label": "Image 1 Alt Text"
-    },
-    {
-      "type": "image_picker",
-      "id": "banner_image_2",
-      "label": "Banner Image 2"
-    },
-    {
-      "type": "text",
-      "id": "banner_image_2_alt",
-      "label": "Image 2 Alt Text"
+      "id": "side_image",
+      "label": "Right Side Image"
     }
   ],
   "presets": [
