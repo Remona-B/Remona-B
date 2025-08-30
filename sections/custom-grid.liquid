@@ -1,5 +1,5 @@
 
-{ %schema%}
+{% schema %}
 {
   "name" : "Custom Product Grid",
   "settings" : [
@@ -21,7 +21,7 @@
   <div class="grid">
     {%assign collection = collections[section.settings.collection]%}
     {% for product in collection.products%}
-    <div class="product-card data-handle="{{product.handle}}">
+    <div class="product-card" data-handle="{{product.handle}}">
       <img src="{{product.featured_image| image_url:width:400}}" alt="{{product.title}}">
       <h3>{{product.title}}</h3>
       <p>{{product.price | money}}</p>
@@ -41,7 +41,7 @@
 
 <style>
 /* === Product Grid Style === */
-.custum-grid .grid{
+.custom-grid .grid{
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap:2rem;
