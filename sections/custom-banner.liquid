@@ -1,12 +1,5 @@
 <div class="custom-banner" style="padding: 60px 20px;">
 
-  <!-- Top Banner Image -->
-  {% if section.settings.top_image != blank %}
-    <div style="text-align: center; margin-bottom: 40px;">
-      <img src="{{ section.settings.top_image | image_url: width: 1200 }}" alt="Top Banner" style="max-width: 100%; height: auto;">
-    </div>
-  {% endif %}
-
   <!-- Top Row (Brand / Topline / Button) -->
   <div class="banner-top">
     <div class="brand">{{ section.settings.brand_text }}</div>
@@ -15,6 +8,13 @@
       <a href="{{ section.settings.button_link }}" class="btn btn-animate">{{ section.settings.button_text }}</a>
     {% endif %}
   </div>
+
+  <!-- Top Banner Image -->
+  {% if section.settings.top_image != blank %}
+    <div style="text-align: center; margin-bottom: 40px;">
+      <img src="{{ section.settings.top_image | image_url: width: 1200 }}" alt="Top Banner" style="max-width: 100%; height: auto;">
+    </div>
+  {% endif %}
 
   <!-- Main Heading -->
   <h1 class="main-heading">{{ section.settings.heading }}</h1>
