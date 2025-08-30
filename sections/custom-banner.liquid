@@ -35,7 +35,7 @@
       {% endif %}
 
       {% if section.settings.left_button_text != blank and section.settings.left_button_link != blank %}
-        <a href="{{ section.settings.left_button_link }}" class="btn-animate">
+        <a href="{{ section.settings.left_button_link }}" class="btn-animate" id="bottom-btn">
           {{ section.settings.left_button_text }}
         </a>
       {% endif %}
@@ -205,6 +205,10 @@
   background: #ffeb3b;     /* yellow */
   color: #fff;             /* white text */
   transform: scale(1.05);
+}
+
+#bottom-btn{
+  margin-top:80px;
 }
 
 /* Headings */
