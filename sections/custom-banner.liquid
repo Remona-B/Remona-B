@@ -1,3 +1,43 @@
+<div class="custom-banner" style="background-image: url({{ section.settings.background_image | img_url: '2000x' }});">
+  <div class="banner-content">
+    
+    <!-- Top Row -->
+    <div class="banner-top">
+      <div class="brand">{{ section.settings.brand_text }}</div>
+      <div class="topline">{{ section.settings.topline_text }}</div>
+      {% if section.settings.button_text != blank %}
+        <a href="{{ section.settings.button_link }}" class="btn btn-animate">{{ section.settings.button_text }}</a>
+      {% endif %}
+    </div>
+
+    <!-- Main Heading -->
+    <h1 class="main-heading">{{ section.settings.heading }}</h1>
+    <p class="subheading">{{ section.settings.subheading }}</p>
+
+    <!-- Bottom Button -->
+    {% if section.settings.bottom_button_text != blank %}
+      <a href="{{ section.settings.bottom_button_link }}" class="btn btn-animate">{{ section.settings.bottom_button_text }}</a>
+    {% endif %}
+
+    <!-- Side-by-side Banners -->
+    <div class="custom-banner__wrapper">
+      {% if section.settings.banner_image_1 != blank %}
+        <div class="custom-banner__image">
+          <img src="{{ section.settings.banner_image_1 | img_url: 'master' }}" alt="{{ section.settings.banner_image_1_alt | escape }}">
+        </div>
+      {% endif %}
+      {% if section.settings.banner_image_2 != blank %}
+        <div class="custom-banner__image">
+          <img src="{{ section.settings.banner_image_2 | img_url: 'master' }}" alt="{{ section.settings.banner_image_2_alt | escape }}">
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Footer Text -->
+    <div class="footer-text">{{ section.settings.footer_text }}</div>
+  </div>
+</div>
+
 {% schema %}
 {
   "name": "Custom Banner",
@@ -58,6 +98,26 @@
       "type": "image_picker",
       "id": "background_image",
       "label": "Background Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "banner_image_1",
+      "label": "Banner Image 1"
+    },
+    {
+      "type": "text",
+      "id": "banner_image_1_alt",
+      "label": "Image 1 Alt Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "banner_image_2",
+      "label": "Banner Image 2"
+    },
+    {
+      "type": "text",
+      "id": "banner_image_2_alt",
+      "label": "Image 2 Alt Text"
     }
   ],
   "presets": [
@@ -67,28 +127,6 @@
   ]
 }
 {% endschema %}
-
-<div class="custom-banner" style="background-image: url({{ section.settings.background_image | img_url: '2000x' }});">
-  <div class="banner-content">
-    
-    <!-- Top Row -->
-    <div class="banner-top">
-      <div class="brand">{{ section.settings.brand_text }}</div>
-      <div class="topline">{{ section.settings.topline_text }}</div>
-      <a href="{{ section.settings.button_link }}" class="btn btn-animate">{{ section.settings.button_text }}</a>
-    </div>
-
-    <!-- Main Heading -->
-    <h1 class="main-heading">{{ section.settings.heading }}</h1>
-    <p class="subheading">{{ section.settings.subheading }}</p>
-
-    <!-- Bottom Button -->
-    <a href="{{ section.settings.bottom_button_link }}" class="btn btn-animate">{{ section.settings.bottom_button_text }}</a>
-
-    <!-- Footer Text -->
-    <div class="footer-text">{{ section.settings.footer_text }}</div>
-  </div>
-</div>
 
 <style>
 .custom-banner {
@@ -153,5 +191,33 @@
   border-top: 1px solid #000;
   display: inline-block;
   padding-top: 5px;
+}
+
+/* Side banners */
+.custom-banner__wrapper {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 40px auto;
+  max-width: 1200px;
+}
+
+.custom-banner__image {
+  flex: 1;
+  text-align: center;
+}
+
+.custom-banner__image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+.custom-banner__image img:hover {
+  transform: scale(1.03);
 }
 </style>
