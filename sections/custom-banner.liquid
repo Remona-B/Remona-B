@@ -178,3 +178,135 @@
   ]
 }
 {% endschema %}
+
+<style>
+  .custom-banner {
+  background-size: cover;
+  background-position: center;
+  padding: 60px 20px;
+  text-align: center;
+  position: relative;
+}
+
+/* Top row */
+.banner-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  font-weight: bold;
+}
+
+.brand {
+  font-size: 16px;
+  border: 1px solid black;
+  padding: 5px 10px;
+}
+
+.topline {
+  flex: 1;
+  text-align: center;
+  font-size: 14px;
+  color: #111;
+}
+
+/* Buttons */
+.btn-animate {
+  display: inline-block;
+  background: #ffeb3b;
+  padding: 10px 20px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.btn-animate:hover {
+  background: #000;
+  color: #fff;
+  transform: scale(1.05);
+}
+
+/* Headings */
+.main-heading {
+  font-size: 42px;
+  margin: 20px 0 10px;
+  font-weight: bold;
+}
+
+.subheading {
+  font-size: 16px;
+  max-width: 600px;
+  margin: 0 auto 20px;
+}
+
+/* Footer */
+.footer-text {
+  margin-top: 30px;
+  font-size: 12px;
+  border-top: 1px solid #000;
+  display: inline-block;
+  padding-top: 5px;
+}
+
+/* Two-column layout (welcome + right image) */
+.banner-columns {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  flex-wrap: wrap;
+  margin-top: 50px;
+}
+
+.banner-left {
+  flex: 1;
+  min-width: 300px;
+  max-width: 600px;
+  text-align: left;
+}
+
+.banner-left p {
+  font-size: 16px;
+  margin-bottom: 10px;
+  font-weight: 400;
+  color: #555;
+}
+
+.banner-left h2 {
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.banner-left .desc {
+  font-size: 18px;
+  margin-bottom: 30px;
+  line-height: 1.6;
+  color: #333;
+}
+
+.banner-left .btn-animate {
+  font-size: 16px;
+  font-weight: 600;
+  padding: 12px 30px;
+  border-radius: 4px;
+}
+
+.banner-right {
+  flex: 1;
+  text-align: center;
+  min-width: 300px;
+}
+
+.banner-right img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+.banner-right img:hover {
+  transform: scale(1.03);
+}
+</style>
