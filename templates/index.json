@@ -13,10 +13,22 @@
       "type": "custom-banner",
       "name": "Custom Banner",
       "settings": {
+        "top_image": "shopify://shop_images/Frame.png",
+        "brand_text": "TISSO VISION",
+        "topline_text": "Find the ideal gift for your loved ones.",
         "button_text": "Shop now",
         "button_link": "",
         "heading": "Welcome",
-        "subheading": "Discover our latest trends and collections"
+        "subheading": "Discover our latest trends and collections",
+        "bottom_button_text": "SHOP NOW",
+        "bottom_button_link": "",
+        "footer_text": "SUSTAINABLE, ETHICALLY MADE CLOTHES IN SIZES XXS TO 6XL",
+        "left_small_text": "Welcome",
+        "left_heading": "Discover the Latest Trends",
+        "left_description": "Stay ahead in style with our newest arrivals and exclusive picks designed just for you.",
+        "left_button_text": "SHOP NOW",
+        "left_button_link": "",
+        "side_image": "shopify://shop_images/Frame_1.png"
       }
     },
     "custom_grid_fkXazk": {
