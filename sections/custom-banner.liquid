@@ -1,88 +1,64 @@
-
 {% schema %}
-
 {
   "name": "Custom Banner",
   "settings":[
-  {
-    "type" : "text",//text field for heading
-    "id" : "heading",
-    "label" : "Heading",
-    "default": "Welcome"
-  },
-  {
-    "type" : "text",//text field for sub-heading
-    "id" : "subheading",
-    "label" : "Subheading",
-    "default": "Discover our latest trends and collections"
-  },
-  {
-    "type" : "url",//button link
-    "id" : "button_link",
-    "label" : "Button Link",
-  },
-  {
-    "type" : "text",//button text
-    "id" : "button_text",
-    "label" : "Button Text",
-    "default" : "Shop now"
-  },
-  {
-    "type" : "image_picker",//upload bg for banner
-    "id" : "background",
-    "label" : "Background Image"
-  }
-],
-
-"presets" : [
-  {
-    "name": "Custom Banner" //allows addable section
-  }  
-]
+    { "type":"text",  "id":"heading",     "label":"Heading",     "default":"Welcome" },
+    { "type":"text",  "id":"subheading",  "label":"Subheading",  "default":"Discover our latest trends and collections" },
+    { "type":"url",   "id":"button_link", "label":"Button link" },
+    { "type":"text",  "id":"button_text", "label":"Button text", "default":"Shop now" },
+    { "type":"image_picker", "id":"background", "label":"Background image" }
+  ],
+  "presets":[{ "name":"Custom Banner" }]
 }
 {% endschema %}
 
 <!-- Banner HTML -->
-<section class= "custom-banner" style="background-image:url({{section.settings.background| image_url}});">
+<section class="custom-banner" style="background-image:url({{ section.settings.background | image_url }});">
   <div class="banner-content">
-    <h1>{{section.settings.heading}}</h1> //dynamic heading from editor
-    <p>{{section.settings.subheading}}</p> //dynamic subheading
-    <a href="{{section.settings.button_link}}" class="btn">{{section.settings.button_text}}</a>
+    <h1>{{ section.settings.heading }}</h1>
+    <p>{{ section.settings.subheading }}</p>
+    <a href="{{ section.settings.button_link }}" class="btn">{{ section.settings.button_text }}</a>
   </div>
 </section>
 
 <style>
-/* === Banner Style === */
 .custom-banner{
-  height:80vh;
-  background-size: cover;
-  display: flex;
-  align-items: center;
+  height:80vh; 
+  background-size:cover; 
+  background-position:center;
+  display:flex; 
+  align-items:center;
   justify-content:center;
   text-align:center;
 }
 
-.custom-banner .banner-content{
-  background: rgba(0,0,0,0.5);
-  padding: 2rem;
-  border-radius: 12px;
+.custom-banner .banner-content{ 
+  background:rgba(0,0,0,.5); 
+  padding:2rem;
+  border-radius:12px; 
 }
 
-.custom-banner h1{
-  color: #fff;
-  margin-bottom: 1rem;
+.custom-banner h1{ 
+  color:#fff; 
+  margin-bottom:1rem;
+  font-size:clamp(28px,5vw,56px); 
 }
 
 .custom-banner p{
   color:#ddd;
-  margin-bottom: 1rem;
+  margin:0 0 1rem 0; 
 }
 
-.custom-banner .btn{
-  background: #000;
-  color: #fff;
-  padding: 0.75rem 1.5rem;
-  text-decoration: none;
+.custom-banner .btn{ 
+  background:#000; 
+  color:#fff; 
+  padding:.75rem 1.5rem;
   border-radius:8px;
+  text-decoration:none;
 }
+
+.custom-banner .btn:hover{ 
+  transform:translateX(4px);
+  transition:transform .2s ease;
+} 
 </style>
