@@ -1,11 +1,11 @@
-<div class="custom-banner" style="padding: 60px 20px;">
+<div class="custom-banner">
 
   <!-- Top Row (Brand / Topline / Button) -->
   <div class="banner-top">
     <div class="brand">{{ section.settings.brand_text }}</div>
     <div class="topline">{{ section.settings.topline_text }}</div>
     {% if section.settings.button_text != blank %}
-      <a href="{{ section.settings.button_link }}" class="btn btn-animate">{{ section.settings.button_text }}</a>
+      <a href="{{ section.settings.button_link }}" class="btn-animate">{{ section.settings.button_text }}</a>
     {% endif %}
   </div>
 
@@ -18,35 +18,24 @@
 
   <!-- Bottom Button -->
   {% if section.settings.bottom_button_text != blank %}
-    <a href="{{ section.settings.bottom_button_link }}" class="btn btn-animate">{{ section.settings.bottom_button_text }}</a>
+    <a href="{{ section.settings.bottom_button_link }}" class="btn-animate">{{ section.settings.bottom_button_text }}</a>
   {% endif %}
 
-  <!-- Two Column Layout: Left Text + Right Side Banner -->
-  <div style="display: flex; align-items: center; justify-content: space-between; gap: 40px; flex-wrap: wrap; margin-top: 50px;">
-    
+  <!-- Two Column Layout -->
+  <div class="banner-columns">
+
     <!-- Left Text Section -->
-    <div style="flex: 1; min-width: 300px; max-width: 600px;">
+    <div class="banner-left">
       {% if section.settings.left_heading != blank %}
-        <h2 style="font-size: 36px; font-weight: 700; margin-bottom: 20px;">
-          {{ section.settings.left_heading }}
-        </h2>
+        <h2>{{ section.settings.left_heading }}</h2>
       {% endif %}
 
       {% if section.settings.left_description != blank %}
-        <p style="font-size: 18px; margin-bottom: 30px; line-height: 1.6; color: #333;">
-          {{ section.settings.left_description }}
-        </p>
+        <p class="desc">{{ section.settings.left_description }}</p>
       {% endif %}
 
       {% if section.settings.left_button_text != blank and section.settings.left_button_link != blank %}
-        <a href="{{ section.settings.left_button_link }}" 
-           style="background-color: #fce300; 
-                  padding: 12px 30px; 
-                  font-size: 16px; 
-                  font-weight: 600; 
-                  color: #000; 
-                  text-decoration: none; 
-                  border-radius: 4px;">
+        <a href="{{ section.settings.left_button_link }}" class="btn-animate">
           {{ section.settings.left_button_text }}
         </a>
       {% endif %}
@@ -54,11 +43,10 @@
 
     <!-- Right Side Image -->
     {% if section.settings.side_image != blank %}
-      <div style="flex: 1; text-align: center; min-width: 300px;">
-        <img src="{{ section.settings.side_image | image_url: width: 600 }}" alt="Side Banner" style="max-width: 100%; height: auto;">
+      <div class="banner-right">
+        <img src="{{ section.settings.side_image | image_url: width: 600 }}" alt="Side Banner">
       </div>
     {% endif %}
-    
   </div>
 
   <!-- Footer Text -->
@@ -174,8 +162,9 @@
   background-size: cover;
   background-position: center;
   padding: 60px 20px;
-  text-align: center;
   position: relative;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 /* Top row */
@@ -203,16 +192,18 @@
 /* Buttons */
 .btn-animate {
   display: inline-block;
-  background: #ffeb3b;
-  padding: 10px 20px;
+  background: #000;        /* black default */
+  color: #fff;             /* white text */
+  padding: 12px 28px;
   font-weight: bold;
   text-decoration: none;
-  transition: transform 0.3s ease, background 0.3s ease;
+  border-radius: 4px;
+  transition: all 0.3s ease;
 }
 
 .btn-animate:hover {
-  background: #000;
-  color: #fff;
+  background: #ffeb3b;     /* yellow */
+  color: #fff;             /* white text */
   transform: scale(1.05);
 }
 
@@ -221,12 +212,14 @@
   font-size: 42px;
   margin: 20px 0 10px;
   font-weight: bold;
+  text-align: center;
 }
 
 .subheading {
   font-size: 16px;
   max-width: 600px;
   margin: 0 auto 20px;
+  text-align: center;
 }
 
 /* Footer */
@@ -236,9 +229,10 @@
   border-top: 1px solid #000;
   display: inline-block;
   padding-top: 5px;
+  text-align: center;
 }
 
-/* Two-column layout (welcome + right image) */
+/* Two-column layout */
 .banner-columns {
   display: flex;
   align-items: center;
@@ -252,14 +246,7 @@
   flex: 1;
   min-width: 300px;
   max-width: 600px;
-  text-align: left;
-}
-
-.banner-left p {
-  font-size: 16px;
-  margin-bottom: 10px;
-  font-weight: 400;
-  color: #555;
+  text-align: left; /* <-- force left alignment */
 }
 
 .banner-left h2 {
@@ -273,13 +260,7 @@
   margin-bottom: 30px;
   line-height: 1.6;
   color: #333;
-}
-
-.banner-left .btn-animate {
-  font-size: 16px;
-  font-weight: 600;
-  padding: 12px 30px;
-  border-radius: 4px;
+  text-align: left;
 }
 
 .banner-right {
