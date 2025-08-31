@@ -60,35 +60,6 @@
       "default": "SUSTAINABLE, ETHICALLY MADE CLOTHES IN SIZES XXS TO 6XL"
     },
     {
-      "type": "text",
-      "id": "left_small_text",
-      "label": "Left Small Text",
-      "default": "Welcome"
-    },
-    {
-      "type": "text",
-      "id": "left_heading",
-      "label": "Left Heading",
-      "default": "Discover the Latest Trends"
-    },
-    {
-      "type": "textarea",
-      "id": "left_description",
-      "label": "Left Description",
-      "default": "Stay ahead in style with our newest arrivals and exclusive picks designed just for you."
-    },
-    {
-      "type": "text",
-      "id": "left_button_text",
-      "label": "Left Button Text",
-      "default": "SHOP NOW"
-    },
-    {
-      "type": "url",
-      "id": "left_button_link",
-      "label": "Left Button Link"
-    },
-    {
       "type": "image_picker",
       "id": "side_image",
       "label": "Right Side Image"
@@ -106,24 +77,24 @@
 
   <!-- Top -->
   <div class="banner-top">
+    <button class="menu-toggle">☰</button>
     <div class="brand"><b>{{ section.settings.brand_text }}</b></div>
-    <div class="topline">{{ section.settings.topline_text }}</div>
     {% if section.settings.button_text != blank %}
       <a href="{{ section.settings.button_link }}" class="btn-animate" id="btn1">{{ section.settings.button_text }}→</a>
     {% endif %}
   </div>
 
-  <!-- Top Image -->
+  <!-- Desktop Top Image -->
   {% if section.settings.top_image != blank %}
-    <div style="text-align: center; margin-bottom: 20px;">
-      <img src="{{ section.settings.top_image | image_url: width: 1200 }}" alt="Top Banner" style="max-width: 100%; height: auto;">
+    <div class="desktop-only" style="text-align:center; margin-bottom:20px;">
+      <img src="{{ section.settings.top_image | image_url: width: 1200 }}" alt="Top Banner" style="max-width:100%; height:auto;">
     </div>
   {% endif %}
+
   <div class="banner-columns">
 
     <!-- Left Text Section -->
     <div class="banner-left">
-
       {% if section.settings.heading != blank %}
         <h1 class="main-heading">{{ section.settings.heading }}</h1>
       {% endif %}
@@ -133,34 +104,33 @@
       {% endif %}
 
       {% if section.settings.bottom_button_text != blank %}
-        <div class="bottom-btn-wrap">
+        <div class="bottom-btn-wrap desktop-only">
           <a href="{{ section.settings.bottom_button_link }}" class="btn-animate">{{ section.settings.bottom_button_text }}</a>
         </div>
       {% endif %}
-
-      
     </div>
 
-    <!-- Right Side Image -->
+    <!-- Banner Image -->
     {% if section.settings.side_image != blank %}
       <div class="banner-right">
-        <img src="{{ section.settings.side_image | image_url: width: 600 }}" alt="Side Banner">
+        <img src="{{ section.settings.side_image | image_url: width: 1200 }}" alt="Banner">
+        <div class="bottom-btn-wrap mobile-only">
+          <a href="{{ section.settings.bottom_button_link }}" class="btn-animate">{{ section.settings.bottom_button_text }}</a>
+        </div>
       </div>
     {% endif %}
   </div>
 </div>
-  <!-- Footer Text-->
-  <div class="footer-text">{{ section.settings.footer_text }}</div><br><br>
+
+<!-- Footer -->
+<div class="footer-text">{{ section.settings.footer_text }}</div>
 
 <style>
 .custom-banner {
   background-size: cover;
   background-position: center;
-  padding: 0 20px 40px; 
-  position: relative;
   max-width: 1400px;
   margin: 0 auto;
-  padding-bottom:0px;
 }
 
 /* Top row */
@@ -168,164 +138,97 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top:15px;
-  margin-bottom: 15px;
+  margin: 10px 0;
 }
-
 .brand {
   font-size: 16px;
   border: 1px solid black;
   padding: 5px 10px;
-  color:black;
+  color: black;
 }
-
-.topline {
-  flex: 1;
-  text-align: center;
-  font-size: 14px;
-  color: #111;
+.menu-toggle {
+  font-size: 22px;
+  cursor: pointer;
+  border: none;
+  background: none;
 }
+.topline { display:none; }
 
-/* Shared button base */
+/* Buttons */
 .btn-animate {
-  display: inline-block;
-  padding: 10px 40px;
-  text-decoration: none;
-  position: relative;
-  overflow: hidden;
-  transition: color 0.4s ease, box-shadow 0.3s ease;
-  z-index: 1;
+  display:inline-block;
+  padding:10px 30px;
+  text-decoration:none;
+  position:relative;
+  transition: all 0.3s ease;
 }
+#btn1 { background:#ffeb3b; color:black; }
 
-/* Fill effect layer */
-.btn-animate::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 0;
-  z-index: -1;
-  transition: width 0.8s ease;
-}
-
-/* Text wrapper */
-.btn-animate span {
-  position: relative;
-  z-index: 2;
-}
-
-/* Top button (yellow → black) */
-#btn1 {
-  background: #ffeb3b;
-  color: black;
-}
-#btn1::before {
-  background: #000;
-}
-#btn1:hover {
-  color: white;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.2);
-}
-#btn1:hover::before {
-  width: 100%;
-}
-
-/* Bottom button (black → yellow) */
-.btn-animate:not(#btn1) {
-  background: #000;
-  color: white;
-}
-.btn-animate:not(#btn1)::before {
-  background: #ffeb3b;
-}
-.btn-animate:not(#btn1):hover {
-  color: black;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.2);
-}
-.btn-animate:not(#btn1):hover::before {
-  width: 100%;
-}
-
-
+/* Headings */
 .main-heading {
-  font-size: 42px;
-  margin: 10px 0 10px;
-  font-weight: bold;
-  text-align: left;  
+  font-size:42px;
+  font-weight:bold;
+  margin:10px 0;
 }
 .subheading {
-  font-size: 16px;
-  max-width: 600px;
-  margin: 0 0 20px;
-  text-align: left;  
+  font-size:16px;
+  max-width:600px;
+  margin:0 0 20px;
+  color:#333;
 }
-
-
-.bottom-btn-wrap {
-  text-align: left; 
-  margin: 20px 0 40px;
-}
+.bottom-btn-wrap { margin:20px 0 40px; }
 
 /* Footer */
 .footer-text {
-  margin-top:3px;
-  margin-bottom:3px;
+  font-size:12px;
+  text-align:center;
   padding:5px;
-  font-size: 12px;
-  text-align: center;
-  color:black;
-  background:#F5F5F5;
+  background:#f5f5f5;
+  margin-top:5px;
 }
 
-
+/* Layout */
 .banner-columns {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 40px;
-  flex-wrap: wrap;
-  margin-top: 10px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:40px;
+  flex-wrap:wrap;
 }
-.banner-left {
-  flex: 1;
-  min-width: 300px;
-  max-width: 500px;
-  text-align: left;
-}
-.banner-left h2 {
-  font-size: 28px;
-  font-weight: 700;
-  margin-bottom: 20px;
-}
-.banner-left .desc {
-  font-size: 18px;
-  margin-bottom: 30px;
-  line-height: 1.6;
-  color: #333;
-}
-.banner-right {
-  flex: 1;
-  text-align: center;
-  min-width: 300px;
-}
-.banner-right img {
-  max-width: 100%;
-  height: auto;
-}
+.banner-left { flex:1; min-width:300px; }
+.banner-right { flex:1; text-align:center; }
 
+/* Desktop/Mobile toggles */
+.desktop-only { display:block; }
+.mobile-only { display:none; }
+
+/* Mobile Styles */
 @media (max-width: 600px) {
-  /* Hide top_image completely */
-  .custom-banner > div[style*="Top Banner"] {
-    display: none !important;
+  .brand {
+    border:none;
+    font-size:18px;
+    text-align:center;
+    flex:1;
   }
+  #btn1 { display:none; }
+  .banner-columns { display:block; text-align:center; }
+  .main-heading { font-size:22px; }
+  .subheading { font-size:14px; margin:0 auto 15px; max-width:90%; }
+  .desktop-only { display:none !important; }
+  .mobile-only { display:block !important; }
 
-  /* Show only banner-right image */
-  .banner-right {
-    display: block;
-    position: relative;
-    text-align: center;
+  .banner-right { position:relative; }
+  .bottom-btn-wrap.mobile-only {
+    position:absolute;
+    bottom:15px;
+    left:50%;
+    transform:translateX(-50%);
+  }
+  .bottom-btn-wrap .btn-animate {
+    background:black;
+    color:white;
+    padding:10px 24px;
+    font-size:14px;
   }
 }
-
 </style>
