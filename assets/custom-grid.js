@@ -9,84 +9,119 @@ document.addEventListener('DOMContentLoaded', () => {
   const closeBtn = popup.querySelector('.close');
 
   let currentProduct = null;
+  let selectedOptions = {};
 
   // Open popup
-  async function openPopup(handle) {
+  const openPopup = async (handle) => {
     try {
       const res = await fetch(`/products/${handle}.js`);
       const product = await res.json();
       currentProduct = product;
 
-      // Fill static content
+      // Fill content
       popupImage.src = product.images[0] || '';
       popupTitle.textContent = product.title;
       popupPrice.textContent = `${Shopify.currency.active} ${(product.price / 100).toFixed(2)}`;
-      popupDesc.textContent =
-        "This one-piece swimsuit is crafted from jersey featuring an allover micro Monogram motif in relief.";
+      popupDesc.textContent = "This one-piece swimsuit is crafted from jersey featuring an allover micro Monogram motif in relief.";
 
-      // Build static Size + Color options
       popupOptions.innerHTML = "";
 
-      // SIZE (if available in any option)
-      const sizeValues = [...new Set(product.variants.map(v => v.option1))].filter(v => v);
-      if (sizeValues.length > 1) {
-        popupOptions.innerHTML += `
-          <div class="popup-option">
-            <label style="display:block;margin:.5rem 0 .25rem;">Size</label>
-            <select data-option-index="0" style="width:100%;padding:.5rem;border:1px solid #ddd;border-radius:6px;">
-              ${sizeValues.map(v => `<option value="${v}">${v}</option>`).join('')}
-            </select>
-          </div>`;
+      // Assume option1 = Size, option2 = Color (common Shopify setup)
+      const sizes = [...new Set(product.variants.map(v => v.option1))];
+      const colors = [...new Set(product.variants.map(v => v.option2))];
+
+      // Size dropdown
+      if (sizes.length > 1) {
+        const sizeWrapper = document.createElement("div");
+        sizeWrapper.innerHTML = `
+          <label style="display:block;margin:.5rem 0 .25rem;">Size</label>
+          <select data-option="size" style="width:100%;padding:.5rem;border:1px solid #ddd;border-radius:6px;">
+            ${sizes.map(s => `<option value="${s}">${s}</option>`).join("")}
+          </select>
+        `;
+        popupOptions.appendChild(sizeWrapper);
+
+        selectedOptions.size = sizes[0];
       }
 
-      // COLOR (if available in any option)
-      const colorValues = [...new Set(product.variants.map(v => v.option2))].filter(v => v);
-      if (colorValues.length > 1) {
-        popupOptions.innerHTML += `
-          <div class="popup-option">
-            <label style="display:block;margin:.5rem 0 .25rem;">Color</label>
-            <select data-option-index="1" style="width:100%;padding:.5rem;border:1px solid #ddd;border-radius:6px;">
-              ${colorValues.map(v => `<option value="${v}">${v}</option>`).join('')}
-            </select>
-          </div>`;
+      // Color swatches
+      if (colors.length > 0) {
+        const colorWrapper = document.createElement("div");
+        colorWrapper.innerHTML = `<label style="display:block;margin:.5rem 0 .25rem;">Color</label>`;
+        const swatchContainer = document.createElement("div");
+        swatchContainer.style.display = "flex";
+        swatchContainer.style.gap = "8px";
+
+        colors.forEach(c => {
+          const btn = document.createElement("button");
+          btn.textContent = c;
+          btn.style.padding = "6px 12px";
+          btn.style.border = "2px solid #ddd";
+          btn.style.borderLeft = `12px solid ${c.toLowerCase()}`; // left border in color
+          btn.style.borderRadius = "6px";
+          btn.style.cursor = "pointer";
+          btn.style.background = "#fff";
+
+          btn.onclick = () => {
+            selectedOptions.color = c;
+
+            // Highlight selected
+            swatchContainer.querySelectorAll("button").forEach(b => {
+              b.style.borderColor = "#ddd";
+            });
+            btn.style.borderColor = "#000";
+          };
+
+          swatchContainer.appendChild(btn);
+        });
+
+        colorWrapper.appendChild(swatchContainer);
+        popupOptions.appendChild(colorWrapper);
+
+        selectedOptions.color = colors[0];
       }
 
-      popup.classList.remove('hidden');
+      popup.classList.remove("hidden");
+
     } catch (err) {
-      console.error('Error loading product:', err);
+      console.error("Error loading product:", err);
     }
-  }
+  };
 
   // Get selected variant
-  function getSelectedVariantId() {
+  const getSelectedVariantId = () => {
     if (!currentProduct) return null;
-    const selects = popupOptions.querySelectorAll('select[data-option-index]');
-    const chosen = Array.from(selects).map(s => s.value);
+    const selects = popupOptions.querySelectorAll("select[data-option]");
+    selects.forEach(s => {
+      selectedOptions[s.dataset.option] = s.value;
+    });
+
     const variant = currentProduct.variants.find(v =>
-      chosen.every((val, i) => v[`option${i + 1}`] === val)
+      (!selectedOptions.size || v.option1 === selectedOptions.size) &&
+      (!selectedOptions.color || v.option2 === selectedOptions.color)
     );
     return (variant || currentProduct.variants[0]).id;
-  }
+  };
 
   // Add to cart
-  addBtn.addEventListener('click', async () => {
+  addBtn.addEventListener("click", async () => {
     const variantId = getSelectedVariantId();
     if (!variantId) return;
 
-    await fetch('/cart/add.js', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    await fetch("/cart/add.js", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id: variantId, quantity: 1 })
     });
 
-    popup.classList.add('hidden');
+    popup.classList.add("hidden");
   });
 
-  // Quick view triggers
-  document.querySelectorAll('.quick-view').forEach(btn => {
-    btn.addEventListener('click', () => openPopup(btn.dataset.handle));
+  // Attach quick-view buttons
+  document.querySelectorAll(".quick-view").forEach(btn => {
+    btn.addEventListener("click", () => openPopup(btn.dataset.handle));
   });
 
   // Close popup
-  closeBtn?.addEventListener('click', () => popup.classList.add('hidden'));
+  closeBtn?.addEventListener("click", () => popup.classList.add("hidden"));
 });
