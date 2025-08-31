@@ -41,23 +41,29 @@
 <div id="product-popup" class="popup hidden" aria-hidden="true">
   <div class="popup-content" role="dialog" aria-modal="true">
     <button class="close" aria-label="Close">&times;</button>
+    
+    <div class="popup-grid">
+      <!-- Left: Image -->
+      <div class="popup-image-wrap">
+        <img id="popup-image" src="" alt="">
+      </div>
 
-    <!-- Image -->
-    <div class="popup-image-wrap">
-      <img id="popup-image" src="" alt="">
+      <!-- Right: Details -->
+      <div class="popup-details">
+        <h2 id="popup-title"></h2>
+        <p id="popup-description"></p>
+        <p id="popup-price"></p>
+      </div>
     </div>
 
-    <!-- Details -->
-    <div class="popup-body">
-      <h2 id="popup-title"></h2>
-      <p id="popup-price"></p>
-      <p id="popup-description" style="font-size:14px; color:#555;"></p>
-
+    <!-- Full width bottom -->
+    <div class="popup-bottom">
       <div id="popup-options"></div>
       <button id="popup-add" class="add-to-cart">ADD TO CART →</button>
     </div>
   </div>
 </div>
+
 
 <style>
 /* === Grid === */
@@ -105,60 +111,88 @@
 }
 
 /* === Popup === */
-.popup {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
 .popup.hidden {
   display: none;
 }
+
+.popup {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
 .popup-content {
   background: #fff;
   padding: 1.5rem;
-  max-width: 350px;
+  max-width: 500px;
   width: 90%;
   border-radius: 12px;
   box-shadow: 0 10px 25px rgba(0,0,0,.2);
-  max-height: 90vh;
-  overflow-y: auto;
-  position: relative;
 }
+
 .close {
   position: absolute;
-  top: 10px;
-  right: 12px;
+  top: 10px; right: 15px;
   background: none;
   border: none;
   font-size: 22px;
   cursor: pointer;
 }
+
+/* grid layout inside popup */
+.popup-grid {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+/* left side image */
 .popup-image-wrap {
-  width: 100%;
+  width: 120px;
   aspect-ratio: 1/1;
   overflow: hidden;
   border-radius: 8px;
-  margin-bottom: 1rem;
 }
 .popup-image-wrap img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: cover; /* crop image like product grid */
   display: block;
 }
-.popup-body h2 {
-  margin: 10px 0 5px;
+
+/* right side text */
+.popup-details h2 {
+  margin: 0 0 6px;
   font-size: 18px;
   font-weight: 600;
 }
-.popup-body p { margin: 0 0 10px; }
+.popup-details p {
+  margin: 0 0 8px;
+  font-size: 14px;
+  color: #555;
+}
+
+/* bottom full width */
+.popup-bottom {
+  margin-top: 1rem;
+}
+#popup-options label {
+  display: block;
+  margin: .5rem 0 .25rem;
+}
+#popup-options select {
+  width: 100%;
+  padding: .5rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
 .add-to-cart {
   display: block;
   width: 100%;
@@ -172,6 +206,7 @@
   font-weight: bold;
   cursor: pointer;
 }
+
 </style>
 
 <script src="{{ 'custom-grid.js' | asset_url }}" defer></script>
