@@ -187,26 +187,19 @@
   color: #111;
 }
 
-/* Base button style */
+/* Shared button base */
 .btn-animate {
   display: inline-block;
   padding: 10px 40px;
   font-weight: bold;
   text-decoration: none;
-  color: #fff;
-  background: #000;
   position: relative;
   overflow: hidden;
-  transition: color 0.4s ease;
+  transition: color 0.4s ease, box-shadow 0.3s ease;
+  z-index: 1;
 }
 
-/* Default yellow top button */
-#btn1 {
-  background: #ffeb3b;
-  color: black;
-}
-
-/* Loading fill effect */
+/* Fill effect layer */
 .btn-animate::before {
   content: "";
   position: absolute;
@@ -214,23 +207,46 @@
   left: 0;
   height: 100%;
   width: 0;
-  background: #000;
-  z-index: 0;
-  transition: width 1s ease; /* slow fill */
+  z-index: -1;
+  transition: width 0.8s ease;
 }
 
-.btn-animate:hover::before {
-  width: 100%; /* fill left → right */
-}
-
+/* Text wrapper */
 .btn-animate span {
   position: relative;
-  z-index: 1; /* text stays above */
+  z-index: 2;
 }
 
-/* Text color change after fill */
-.btn-animate:hover {
+/* Top button (yellow → black) */
+#btn1 {
+  background: #ffeb3b;
+  color: black;
+}
+#btn1::before {
+  background: #000;
+}
+#btn1:hover {
   color: white;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+}
+#btn1:hover::before {
+  width: 100%;
+}
+
+/* Bottom button (black → yellow) */
+.btn-animate:not(#btn1) {
+  background: #000;
+  color: white;
+}
+.btn-animate:not(#btn1)::before {
+  background: #ffeb3b;
+}
+.btn-animate:not(#btn1):hover {
+  color: black;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+}
+.btn-animate:not(#btn1):hover::before {
+  width: 100%;
 }
 
 
