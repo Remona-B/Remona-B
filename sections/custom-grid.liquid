@@ -58,11 +58,13 @@
 
     <!-- Full width bottom -->
     <div class="popup-bottom">
+      <!-- Options will be injected here -->
       <div id="popup-options"></div>
       <button id="popup-add" class="add-to-cart">ADD TO CART →</button>
     </div>
   </div>
 </div>
+
 
 
 <style>
@@ -129,10 +131,11 @@
 .popup-content {
   background: #fff;
   padding: 1.5rem;
-  max-width: 500px;
-  width: 90%;
+  max-width: 400px; /* smaller width */
+  width: 100%;
   border-radius: 12px;
   box-shadow: 0 10px 25px rgba(0,0,0,.2);
+  position: relative;
 }
 
 .close {
@@ -147,14 +150,15 @@
 /* grid layout inside popup */
 .popup-grid {
   display: grid;
-  grid-template-columns: 120px 1fr;
+  grid-template-columns: 100px 1fr; /* tighter layout */
   gap: 1rem;
   align-items: flex-start;
 }
 
 /* left side image */
+
 .popup-image-wrap {
-  width: 120px;
+  width: 100px;
   aspect-ratio: 1/1;
   overflow: hidden;
   border-radius: 8px;
