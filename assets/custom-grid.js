@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentProduct = null;
 
   // Open popup
-  const openPopup = async (handle) => {
+  async function openPopup(handle) {
     try {
       const res = await fetch(`/products/${handle}.js`);
       const product = await res.json();
@@ -23,14 +23,18 @@ document.addEventListener('DOMContentLoaded', () => {
       popupPrice.textContent = `${Shopify.currency.active} ${(product.price / 100).toFixed(2)}`;
       popupDesc.innerHTML = product.body_html || "";
 
-      // Build variant options
+      // Build dropdowns for options
       popupOptions.innerHTML = '';
       product.options.forEach((optName, idx) => {
         const values = [...new Set(product.variants.map(v => v[`option${idx + 1}`]))];
+
         const wrapper = document.createElement('div');
+        wrapper.className = 'popup-option';
         wrapper.innerHTML = `
-          <label style="display:block;margin:.5rem 0 .25rem;">${optName}</label>
-          <select data-option-index="${idx}" 
+          <label style="display:block;margin:.5rem 0 .25rem;font-weight:500;">
+            ${optName}
+          </label>
+          <select data-option-index="${idx}"
                   style="width:100%;padding:.5rem;border:1px solid #ddd;border-radius:6px;">
             ${values.map(v => `<option value="${v}">${v}</option>`).join('')}
           </select>
@@ -39,14 +43,13 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       popup.classList.remove('hidden');
-
     } catch (err) {
       console.error('Error loading product:', err);
     }
-  };
+  }
 
-  // Get selected variant
-  const getSelectedVariantId = () => {
+  // Get currently selected variant
+  function getSelectedVariantId() {
     if (!currentProduct) return null;
     const selects = popupOptions.querySelectorAll('select[data-option-index]');
     const chosen = Array.from(selects).map(s => s.value);
@@ -54,23 +57,26 @@ document.addEventListener('DOMContentLoaded', () => {
       chosen.every((val, i) => v[`option${i + 1}`] === val)
     );
     return (variant || currentProduct.variants[0]).id;
-  };
+  }
 
   // Add to cart
   addBtn.addEventListener('click', async () => {
     const variantId = getSelectedVariantId();
     if (!variantId) return;
 
-    await fetch('/cart/add.js', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id: variantId, quantity: 1 })
-    });
-
-    popup.classList.add('hidden');
+    try {
+      await fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: variantId, quantity: 1 })
+      });
+      popup.classList.add('hidden');
+    } catch (err) {
+      console.error('Error adding to cart:', err);
+    }
   });
 
-  // Attach quick-view buttons
+  // Attach quick-view triggers
   document.querySelectorAll('.quick-view').forEach(btn => {
     btn.addEventListener('click', () => openPopup(btn.dataset.handle));
   });
