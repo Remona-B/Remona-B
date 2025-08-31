@@ -315,15 +315,15 @@
 }
 
 @media (max-width: 600px) {
-  /* Top layout */
+  /* Top bar with hamburger + brand */
   .banner-top {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
+    gap: 12px;
     padding: 10px 15px;
   }
 
-  /* Hamburger menu */
   .menu-toggle {
     font-size: 22px;
     cursor: pointer;
@@ -337,54 +337,68 @@
     font-weight: bold;
   }
 
-  /* Hide topline + top right button */
   .topline, #btn1 {
-    display: none;
+    display: none; /* hide topline + top button */
   }
 
   /* Headings ABOVE image */
-  .main-heading {
-    font-size: 24px;
+  .banner-columns {
+    display: block;
+  }
+
+  .banner-left {
     text-align: center;
-    margin: 15px 0 8px;
+    margin-bottom: 15px;
+  }
+
+  .main-heading {
+    font-size: 22px;
+    margin-bottom: 6px;
     color: #111;
   }
 
   .subheading {
     font-size: 14px;
-    text-align: center;
+    line-height: 1.5;
     margin: 0 auto 15px;
     max-width: 90%;
     color: #555;
   }
 
-  /* Banner image area smaller */
-  .banner-columns {
-    background: url('{{ section.settings.top_image | image_url: width: 800 }}') no-repeat center/cover;
-    min-height: 180px; /* smaller height */
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    padding: 20px;
+  /* Banner image area */
+  .banner-right {
+    display: block;
+    text-align: center;
+  }
+
+  .banner-right img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Button overlays the image (centered) */
+  .banner-right {
     position: relative;
   }
 
-  /* Only button inside banner */
   .bottom-btn-wrap {
-    margin: 0;
-    text-align: center;
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
   }
 
   .bottom-btn-wrap .btn-animate {
     background: black;
     color: white;
-    padding: 8px 20px;
-    font-size: 13px;
+    padding: 10px 24px;
+    font-size: 14px;
   }
 
-  /* Hide right image completely */
-  .banner-right {
-    display: none;
+  /* Footer remains */
+  .footer-text {
+    font-size: 12px;
+    padding: 6px;
   }
 }
 
