@@ -17,30 +17,27 @@ document.addEventListener('DOMContentLoaded', () => {
       const product = await res.json();
       currentProduct = product;
 
-      // Fill content
+      // Fill static content
       popupImage.src = product.images[0] || '';
       popupTitle.textContent = product.title;
       popupPrice.textContent = `${Shopify.currency.active} ${(product.price / 100).toFixed(2)}`;
-      popupDesc.innerHTML = product.body_html || "";
+      popupDesc.textContent = "This one-piece swimsuit is crafted from jersey featuring an allover micro Monogram motif in relief.";
 
-      // Build dropdowns for options
-      popupOptions.innerHTML = '';
-      product.options.forEach((optName, idx) => {
-        const values = [...new Set(product.variants.map(v => v[`option${idx + 1}`]))];
-
-        const wrapper = document.createElement('div');
-        wrapper.className = 'popup-option';
-        wrapper.innerHTML = `
-          <label style="display:block;margin:.5rem 0 .25rem;font-weight:500;">
-            ${optName}
-          </label>
-          <select data-option-index="${idx}"
-                  style="width:100%;padding:.5rem;border:1px solid #ddd;border-radius:6px;">
-            ${values.map(v => `<option value="${v}">${v}</option>`).join('')}
+      // Build static options
+      popupOptions.innerHTML = `
+        <div class="popup-option">
+          <label style="display:block;margin:.5rem 0 .25rem;font-weight:500;">Size</label>
+          <select data-option-index="0" style="width:100%;padding:.5rem;border:1px solid #ddd;border-radius:6px;">
+            ${[...new Set(product.variants.map(v => v.option1))].map(v => `<option value="${v}">${v}</option>`).join('')}
           </select>
-        `;
-        popupOptions.appendChild(wrapper);
-      });
+        </div>
+        <div class="popup-option">
+          <label style="display:block;margin:.5rem 0 .25rem;font-weight:500;">Color</label>
+          <select data-option-index="1" style="width:100%;padding:.5rem;border:1px solid #ddd;border-radius:6px;">
+            ${[...new Set(product.variants.map(v => v.option2))].map(v => `<option value="${v}">${v}</option>`).join('')}
+          </select>
+        </div>
+      `;
 
       popup.classList.remove('hidden');
     } catch (err) {
@@ -48,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Get currently selected variant
+  // Get selected variant
   function getSelectedVariantId() {
     if (!currentProduct) return null;
     const selects = popupOptions.querySelectorAll('select[data-option-index]');
