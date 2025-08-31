@@ -17,12 +17,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const res = await fetch(`/products/${handle}.js`);
       const product = await res.json();
       currentProduct = product;
-      let currencySymbol = Shopify.currency.active === "EUR" ? "€" : Shopify.currency.active;
 
       // Fill content
       popupImage.src = product.images[0] || '';
       popupTitle.textContent = product.title;
-      popupPrice.textContent = `${currencySymbol} ${(product.price / 100).toFixed(2)}`;
+      popupPrice.textContent = `€ ${(product.price / 100).toFixed(2)}`;
+
 
       popupDesc.textContent = "This one-piece swimsuit is crafted from jersey featuring an allover micro Monogram motif in relief.";
 
