@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const swatchContainer = document.createElement("div");
         swatchContainer.style.display = "grid";
         swatchContainer.style.gridTemplateColumns = "1fr 1fr"; // 2 per row
-        swatchContainer.style.gap = "8px";
+        swatchContainer.style.gap = "1px";
 
         colors.forEach(c => {
           const btn = document.createElement("button");
