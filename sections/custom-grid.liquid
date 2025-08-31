@@ -17,6 +17,14 @@
 {% endschema %}
 
 <section class="custom-grid" data-section-id="{{ section.id }}">
+
+  <!-- Editable Text Box -->
+  <div class="grid-textbox" style="margin-bottom:20px;">
+    <textarea id="grid-heading" 
+              style="width:100%; padding:10px; border:1px solid #ccc; font-size:16px;">
+    </textarea>
+  </div>
+  
   <div class="grid">
     {% for block in section.blocks %}
       {% assign product = all_products[block.settings.product] %}
