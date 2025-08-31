@@ -109,7 +109,7 @@
     <div class="brand">{{ section.settings.brand_text }}</div>
     <div class="topline">{{ section.settings.topline_text }}</div>
     {% if section.settings.button_text != blank %}
-      <a href="{{ section.settings.button_link }}" class="btn-animate">{{ section.settings.button_text }}</a>
+      <a href="{{ section.settings.button_link }}" class="btn-animate" id="btn1">{{ section.settings.button_text }}</a>
     {% endif %}
   </div>
 
@@ -189,6 +189,17 @@
 }
 
 /* Buttons */
+
+#btn{
+  background: #ffeb3b;
+  color: #fff;
+}
+
+#btn:hover{
+  background: #000;
+  color: #fff;
+}
+
 .btn-animate {
   display: inline-block;
   background: #000;
