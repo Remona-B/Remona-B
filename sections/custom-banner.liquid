@@ -187,58 +187,50 @@
   color: #111;
 }
 
-/* Buttons */
+/* Base button style */
 .btn-animate {
   display: inline-block;
-  background: #000;
-  color: #fff;
   padding: 10px 40px;
   font-weight: bold;
   text-decoration: none;
+  color: #fff;
+  background: #000;
   position: relative;
   overflow: hidden;
-  z-index: 1;
+  transition: color 0.4s ease;
 }
 
-/* Loading shimmer effect on hover */
-.btn-animate:hover {
-  color: #000; /* text becomes black */
-  background: #ffeb3b;
-}
-
-.btn-animate:hover::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 200%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.6),
-    transparent
-  );
-  animation: loadingShimmer 1.2s linear infinite;
-  z-index: 2;
-}
-
-@keyframes loadingShimmer {
-  0% {
-    left: -100%;
-  }
-  100% {
-    left: 100%;
-  }
-}
-
-/* Special color scheme for top right button */
+/* Default yellow top button */
 #btn1 {
   background: #ffeb3b;
   color: black;
 }
-#btn1:hover {
-  color: #fff; /* override to white text when hovered */
+
+/* Loading fill effect */
+.btn-animate::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0;
+  background: #000;
+  z-index: 0;
+  transition: width 1s ease; /* slow fill */
+}
+
+.btn-animate:hover::before {
+  width: 100%; /* fill left → right */
+}
+
+.btn-animate span {
+  position: relative;
+  z-index: 1; /* text stays above */
+}
+
+/* Text color change after fill */
+.btn-animate:hover {
+  color: white;
 }
 
 
