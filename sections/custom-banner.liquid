@@ -188,17 +188,6 @@
 }
 
 /* Buttons */
-
-#btn1{
-  background: #ffeb3b;
-  color: black;
-}
-
-#btn1:hover{
-  background: #000;
-  color: #fff;
-}
-
 .btn-animate {
   display: inline-block;
   background: #000;
@@ -206,12 +195,50 @@
   padding: 10px 40px;
   font-weight: bold;
   text-decoration: none;
-  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
 }
+
+/* Loading shimmer effect on hover */
 .btn-animate:hover {
+  color: #000; /* text becomes black */
   background: #ffeb3b;
-  color: #fff;
-  transform: scale(1.05);
+}
+
+.btn-animate:hover::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.6),
+    transparent
+  );
+  animation: loadingShimmer 1.2s linear infinite;
+  z-index: 2;
+}
+
+@keyframes loadingShimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* Special color scheme for top right button */
+#btn1 {
+  background: #ffeb3b;
+  color: black;
+}
+#btn1:hover {
+  color: #fff; /* override to white text when hovered */
 }
 
 
