@@ -74,13 +74,13 @@
 
 .quick-view {
   position: absolute;
-  top: 50%;               /* push to vertical center */
-  left: 50%;              /* push to horizontal center */
-  transform: translate(-50%, -50%); /* perfectly center */
+  top: 50%;               /* center vertically */
+  left: 50%;              /* center horizontally */
+  transform: translate(-50%, -50%); /* perfect centering */
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.75); /* dark semi-transparent background */
   color: #fff;
   font-size: 22px;
   font-weight: bold;
@@ -89,13 +89,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
-  opacity: 0;             /* hidden by default */
+  transition: transform 0.2s ease, background 0.2s ease;
 }
 
-.product-image-wrap:hover .quick-view {
-  opacity: 1;             /* show only on hover */
+.quick-view:hover {
+  background: #000;      /* solid black on hover */
+  transform: translate(-50%, -50%) scale(1.1); /* little grow effect */
 }
+
 
 
 .custom-grid .grid{
