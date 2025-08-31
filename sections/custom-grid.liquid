@@ -22,11 +22,12 @@
       {% assign product = all_products[block.settings.product] %}
       {% if product %}
         <div class="product-card" data-handle="{{ product.handle }}" {{ block.shopify_attributes }}>
-          <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.title }}">
-          <h3>{{ product.title }}</h3>
-          <p>{{ product.price | money }}</p>
-          <button class="view-details" data-handle="{{ product.handle }}">View details</button>
+           <div class="product-image-wrap">
+              <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.title }}">
+             <button class="quick-view" data-handle="{{ product.handle }}">+</button>
+           </div>
         </div>
+
       {% else %}
         <div class="product-card placeholder" {{ block.shopify_attributes }}>
           <div class="placeholder__img" style="aspect-ratio:1/1;background:#f2f2f2;border-radius:10px;"></div>
@@ -46,6 +47,47 @@
 </div>
 
 <style>
+  .product-card {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.product-card img {
+  width: 100%;
+  border-radius: 10px;
+  display: block;
+}
+
+.product-image-wrap {
+  position: relative;
+}
+
+button.quick-view {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #fff;
+  border: 1px solid #ddd;
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .2s ease;
+}
+
+button.quick-view:hover {
+  background: #000;
+  color: #fff;
+  border-color: #000;
+}
+
 .custom-grid .grid{
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
@@ -54,27 +96,6 @@
 
 @media (max-width: 900px){ .custom-grid .grid{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
 @media (max-width: 600px){ .custom-grid .grid{ grid-template-columns:1fr; } }
-
-.product-card{
-  border:1px solid #eee; 
-  padding:1rem; 
-  text-align:center;
-  border-radius:10px;
-}
-
-.product-card img{ 
-  max-width:100%; 
-  border-radius:10px; 
-}
-
-button.view-details{ 
-  margin-top:1rem;
-  padding:.5rem 1rem; 
-  background:#000;
-  color:#fff;
-  border:0;
-  cursor:pointer; 
-}
 
 .popup.hidden{  
   display:none;
