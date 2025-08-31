@@ -316,32 +316,34 @@
 
 @media (max-width: 600px) {
 
-  .menu-toggle {
-    font-size: 22px;
-    cursor: pointer;
-    border: none;
-    background: none;
+  /* Top bar */
+  .banner-top {
+    justify-content: center;
+    margin: 0;
+    padding: 8px 0;
   }
 
   .brand {
     border: none; 
     font-size: 18px;
     font-weight: bold;
-    align-items:center;
+    text-align: center;
   }
 
   .topline, #btn1 {
-    display: none; /* hide topline + top button */
+    display: none !important; /* hide topline + top button */
   }
 
-  /* Headings ABOVE image */
+  /* Headings ABOVE the image */
   .banner-columns {
     display: block;
+    margin: 0;
+    padding: 0;
   }
 
   .banner-left {
     text-align: center;
-    margin-bottom: 15px;
+    margin: 12px 0;
   }
 
   .main-heading {
@@ -353,7 +355,7 @@
   .subheading {
     font-size: 14px;
     line-height: 1.5;
-    margin: 0 auto 15px;
+    margin: 0 auto 12px;
     max-width: 90%;
     color: #555;
   }
@@ -362,6 +364,7 @@
   .banner-right {
     display: block;
     text-align: center;
+    position: relative;
   }
 
   .banner-right img {
@@ -369,16 +372,13 @@
     height: auto;
   }
 
-  /* Button overlays the image (centered) */
-  .banner-right {
-    position: relative;
-  }
-
+  /* Shop button overlays image bottom center */
   .bottom-btn-wrap {
     position: absolute;
-    bottom: 15px;
+    bottom: 12px;
     left: 50%;
     transform: translateX(-50%);
+    margin: 0;
   }
 
   .bottom-btn-wrap .btn-animate {
@@ -388,11 +388,12 @@
     font-size: 14px;
   }
 
-  /* Footer remains */
+  /* Footer */
   .footer-text {
     font-size: 12px;
     padding: 6px;
   }
 }
+
 
 </style>
