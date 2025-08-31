@@ -1,14 +1,7 @@
 {% schema %}
 {
   "name": "Custom Product Grid",
-  "settings": [
-     {
-      "type": "textarea",
-      "id": "grid_text",
-      "label": "Grid Heading / Note",
-      "default": "Type your custom text here..."
-    }
-  ],
+  "settings": [],
   "blocks": [
     {
       "type": "product",
@@ -25,10 +18,8 @@
 
 <section class="custom-grid" data-section-id="{{ section.id }}">
 
-  <!-- Editable Text Box -->
-  <!-- Editable Text Box (via Shopify Editor) -->
-<div class="grid-textbox" style="margin-bottom:20px;">
-  <p>{{ section.settings.grid_text }}</p>
+<div class="grid-heading">
+  <h2>Tisso vision in the wild</h2>
 </div>
 
 
@@ -83,18 +74,16 @@
 
 
 <style>
-  .grid-textbox {
+.grid-heading {
   margin-bottom: 20px;
-  text-align: left; /* center align */
+  text-align: left; /* ensures it’s left aligned */
 }
 
-.grid-note {
-  font-size: 20px;
-  font-weight: 500;
-  color: #333;
-  line-height: 1.4;
-  padding: 10px 0;
-  border-bottom: 1px solid #eee; /* subtle separator */
+.grid-heading h2 {
+  font-size: 22px;
+  font-weight: 600;
+  color: #111;
+  margin: 0;
 }
 
 /* === Grid === */
