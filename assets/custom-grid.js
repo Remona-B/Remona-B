@@ -21,23 +21,35 @@ document.addEventListener('DOMContentLoaded', () => {
       popupImage.src = product.images[0] || '';
       popupTitle.textContent = product.title;
       popupPrice.textContent = `${Shopify.currency.active} ${(product.price / 100).toFixed(2)}`;
-      popupDesc.textContent = "This one-piece swimsuit is crafted from jersey featuring an allover micro Monogram motif in relief.";
+      popupDesc.textContent =
+        "This one-piece swimsuit is crafted from jersey featuring an allover micro Monogram motif in relief.";
 
-      // Build static options
-      popupOptions.innerHTML = `
-        <div class="popup-option">
-          <label style="display:block;margin:.5rem 0 .25rem;font-weight:500;">Size</label>
-          <select data-option-index="0" style="width:100%;padding:.5rem;border:1px solid #ddd;border-radius:6px;">
-            ${[...new Set(product.variants.map(v => v.option1))].map(v => `<option value="${v}">${v}</option>`).join('')}
-          </select>
-        </div>
-        <div class="popup-option">
-          <label style="display:block;margin:.5rem 0 .25rem;font-weight:500;">Color</label>
-          <select data-option-index="1" style="width:100%;padding:.5rem;border:1px solid #ddd;border-radius:6px;">
-            ${[...new Set(product.variants.map(v => v.option2))].map(v => `<option value="${v}">${v}</option>`).join('')}
-          </select>
-        </div>
-      `;
+      // Build static Size + Color options
+      popupOptions.innerHTML = "";
+
+      // SIZE (if available in any option)
+      const sizeValues = [...new Set(product.variants.map(v => v.option1))].filter(v => v);
+      if (sizeValues.length > 1) {
+        popupOptions.innerHTML += `
+          <div class="popup-option">
+            <label style="display:block;margin:.5rem 0 .25rem;">Size</label>
+            <select data-option-index="0" style="width:100%;padding:.5rem;border:1px solid #ddd;border-radius:6px;">
+              ${sizeValues.map(v => `<option value="${v}">${v}</option>`).join('')}
+            </select>
+          </div>`;
+      }
+
+      // COLOR (if available in any option)
+      const colorValues = [...new Set(product.variants.map(v => v.option2))].filter(v => v);
+      if (colorValues.length > 1) {
+        popupOptions.innerHTML += `
+          <div class="popup-option">
+            <label style="display:block;margin:.5rem 0 .25rem;">Color</label>
+            <select data-option-index="1" style="width:100%;padding:.5rem;border:1px solid #ddd;border-radius:6px;">
+              ${colorValues.map(v => `<option value="${v}">${v}</option>`).join('')}
+            </select>
+          </div>`;
+      }
 
       popup.classList.remove('hidden');
     } catch (err) {
@@ -61,19 +73,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const variantId = getSelectedVariantId();
     if (!variantId) return;
 
-    try {
-      await fetch('/cart/add.js', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: variantId, quantity: 1 })
-      });
-      popup.classList.add('hidden');
-    } catch (err) {
-      console.error('Error adding to cart:', err);
-    }
+    await fetch('/cart/add.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: variantId, quantity: 1 })
+    });
+
+    popup.classList.add('hidden');
   });
 
-  // Attach quick-view triggers
+  // Quick view triggers
   document.querySelectorAll('.quick-view').forEach(btn => {
     btn.addEventListener('click', () => openPopup(btn.dataset.handle));
   });
