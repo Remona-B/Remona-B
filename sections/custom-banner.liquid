@@ -314,66 +314,74 @@
   height: auto;
 }
 
-/* Mobile (max-width: 600px) */
+/* Mobile Layout */
 @media (max-width: 600px) {
+  /* Reset banner-top */
   .banner-top {
-    flex-direction: column;
-    align-items: center;
+    display: block;
     text-align: center;
-    gap: 10px;
+    margin-bottom: 10px;
   }
 
   .brand {
-    font-size: 14px;
-    padding: 4px 8px;
+    border: none;        /* remove box */
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
   }
 
-  .topline {
-    font-size: 13px;
-    margin-top: 5px;
+  .topline, #btn1 {
+    display: none; /* hide topline + top right button on mobile */
   }
 
-  #btn1 {
-    padding: 8px 20px;
-    font-size: 13px;
+  /* Make banner image act as background */
+  .banner-columns {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: url('{{ section.settings.top_image | image_url: width: 1200 }}') no-repeat center/cover;
+    padding: 60px 20px;  /* space inside the image */
+    color: #fff;         /* white text for readability */
+    position: relative;
+  }
+
+  .banner-left {
+    max-width: 100%;
+    text-align: center;
   }
 
   .main-heading {
     font-size: 26px;
+    color: white;
+    margin-bottom: 10px;
   }
 
   .subheading {
     font-size: 14px;
     line-height: 1.4;
+    margin: 0 auto 20px;
+    max-width: 90%;
+    color: white;
+  }
+
+  /* Bottom button centered inside banner */
+  .bottom-btn-wrap {
+    text-align: center;
+    margin: 10px auto 0;
   }
 
   .btn-animate {
-    padding: 8px 20px;
-    font-size: 13px;
+    padding: 10px 24px;
+    font-size: 14px;
+    background: #000;
+    color: white;
   }
 
-  .footer-text {
-    font-size: 11px;
-    padding: 4px;
+  /* Remove right side image entirely on mobile */
+  .banner-right {
+    display: none;
   }
-
-  /* Product grid becomes single column */
-  .custom-grid .grid {
-    grid-template-columns: 1fr !important;
-    gap: 1rem;
-  }
-
-  .popup-content {
-    max-width: 90%; /* fit small screens */
-  }
-
-  .popup-grid {
-    grid-template-columns: 1fr; /* stack image + text */
-  }
-
-  .popup-image-wrap {
-    margin-bottom: 1rem;
-    width: 100%;
-  }
+}
 
 </style>
