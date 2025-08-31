@@ -313,86 +313,83 @@
   max-width: 100%;
   height: auto;
 }
-
 @media (max-width: 600px) {
-
-  .menu-toggle {
-    font-size: 22px;
-    cursor: pointer;
-    border: none;
-    background: none;
+  /* Top brand */
+  .banner-top {
+    display: block;
+    text-align: center;
+    margin: 0;
+    padding: 8px 0;
   }
 
   .brand {
-    border: none; 
+    border: none;
     font-size: 18px;
     font-weight: bold;
-    align-items:center;
+    margin: 0;
   }
 
+  /* Hide topline + top button */
   .topline, #btn1 {
-    display: none; /* hide topline + top button */
+    display: none;
   }
 
-  /* Headings ABOVE image */
-  .banner-columns {
-    display: block;
-  }
-
+  /* Headings below brand */
   .banner-left {
     text-align: center;
-    margin-bottom: 15px;
+    margin: 10px auto;
   }
 
   .main-heading {
     font-size: 22px;
-    margin-bottom: 6px;
+    margin: 6px 0;
     color: #111;
   }
 
   .subheading {
     font-size: 14px;
-    line-height: 1.5;
+    line-height: 1.4;
     margin: 0 auto 15px;
     max-width: 90%;
     color: #555;
   }
 
-  /* Banner image area */
+  /* Banner image */
   .banner-right {
     display: block;
+    position: relative;
     text-align: center;
   }
 
   .banner-right img {
     max-width: 100%;
     height: auto;
+    display: block;
   }
 
-  /* Button overlays the image (centered) */
-  .banner-right {
-    position: relative;
-  }
-
+  /* Button inside banner image (bottom center) */
   .bottom-btn-wrap {
     position: absolute;
-    bottom: 15px;
+    bottom: 12px;
     left: 50%;
     transform: translateX(-50%);
+    margin: 0;
   }
 
   .bottom-btn-wrap .btn-animate {
     background: black;
     color: white;
-    padding: 10px 24px;
+    padding: 8px 22px;
     font-size: 14px;
   }
 
-  /* Footer remains */
+  /* Footer */
   .footer-text {
     font-size: 12px;
     padding: 6px;
+    margin-top: 8px;
   }
 }
+
 
 </style>
