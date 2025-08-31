@@ -40,13 +40,26 @@
   </div>
 </section>
 
-<!-- Popup -->
 <div id="product-popup" class="popup hidden" aria-hidden="true">
   <div class="popup-content" role="dialog" aria-modal="true">
     <button class="close" aria-label="Close">&times;</button>
-    <div id="popup-body"></div>
+    
+    <div class="popup-header">
+      <img id="popup-image" src="" alt="" style="width:100%; border-radius:8px;">
+    </div>
+    
+    <div class="popup-body">
+      <h2 id="popup-title"></h2>
+      <p id="popup-price"></p>
+      <p id="popup-description" style="font-size:14px; color:#555;"></p>
+
+      <div id="popup-options"></div>
+
+      <button id="popup-add" class="add-to-cart">ADD TO CART →</button>
+    </div>
   </div>
 </div>
+
 
 <style>
   .product-card {
@@ -108,32 +121,32 @@
   display:none;
 }
 
-.popup{ 
-  position:fixed; 
-  inset:0;
-  background:rgba(0,0,0,.6);  
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-
-.popup-content{ 
+.popup-content { 
   background:#fff; 
-  padding:2rem;
-  max-width:280px; 
+  padding:1.5rem;
+  max-width:350px; 
   width:100%; 
-  position:relative;
+  border-radius:12px;
+  box-shadow:0 10px 25px rgba(0,0,0,.2);
 }
 
-.popup .close{ 
-  position:absolute;
-  top:10px;
-  right:15px;
-  font-size:1.5rem; 
-  background:none;
-  border:0;
+.popup-body h2 { margin:10px 0 5px; font-size:18px; font-weight:600; }
+.popup-body p { margin:0 0 10px; }
+
+.add-to-cart {
+  display:block;
+  width:100%;
+  padding:12px;
+  margin-top:15px;
+  background:black;
+  color:#fff;
+  text-align:center;
+  border:none;
+  border-radius:6px;
+  font-weight:bold;
   cursor:pointer;
 }
+
 </style>
 
 <script src="{{ 'custom-grid.js' | asset_url }}" defer></script>
