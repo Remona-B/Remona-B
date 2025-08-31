@@ -22,16 +22,17 @@
       {% assign product = all_products[block.settings.product] %}
       {% if product %}
         <div class="product-card">
-          <div class="product-image-wrap">
-            <img 
-              src="{{ product.featured_image | image_url: width: 600 }}" 
-              alt="{{ product.title }}">
-            <button class="quick-view" data-handle="{{ product.handle }}">+</button>
-          </div>
+           <div class="product-image-wrap">
+               <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.title }}">
+              <button class="quick-view" data-handle="{{ product.handle }}">+</button>
+            </div>
         </div>
+
+
+
       {% else %}
         <div class="product-card placeholder" {{ block.shopify_attributes }}>
-          <div class="placeholder__img"></div>
+          <div class="placeholder__img" style="aspect-ratio:1/1;background:#f2f2f2;border-radius:10px;"></div>
           <h3>Pick a product</h3>
         </div>
       {% endif %}
@@ -39,102 +40,98 @@
   </div>
 </section>
 
-<!-- Product Quick View Popup -->
+<!-- Popup -->
 <div id="product-popup" class="popup hidden" aria-hidden="true">
   <div class="popup-content" role="dialog" aria-modal="true">
     <button class="close" aria-label="Close">&times;</button>
-    <div class="popup-body">
-      
-      <!-- Left Image -->
-      <div class="popup-left">
-        <img id="popup-image" src="" alt="">
-      </div>
-      
-      <!-- Right Info -->
-      <div class="popup-right">
-        <h3 id="popup-title"></h3>
-        <p id="popup-price" class="popup-price"></p>
-        <p id="popup-description" class="popup-description"></p>
-
-        <!-- Dynamic Options (Colors / Sizes) -->
-        <div id="popup-options"></div>
-
-        <!-- Add to Cart -->
-        <button id="popup-add-to-cart" class="add-to-cart">ADD TO CART →</button>
-      </div>
-    </div>
+    <div id="popup-body"></div>
   </div>
 </div>
 
 <style>
-/* ===== GRID ===== */
-.custom-grid .grid {
-  display: grid;
-  grid-template-columns: repeat(3,minmax(0,1fr));
-  gap: 2rem;
+  .product-card {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
 }
+
+.product-card img {
+  width: 100%;
+  border-radius: 10px;
+  display: block;
+}
+
+.product-image-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+.product-image-wrap img {
+  display: block;
+  width: 100%;
+  border-radius: 10px;
+}
+
+.quick-view {
+  position: absolute;
+  top: 50%;               /* center vertically */
+  left: 50%;              /* center horizontally */
+  transform: translate(-50%, -50%); /* perfect centering */
+  width: 14px;
+  height: 1px;
+  border-radius: 50%;
+  background: #F8F8F8E5; /* dark semi-transparent background */
+  color: black;
+  font-size: 12px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+
+.custom-grid .grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:2rem;
+}
+
 @media (max-width: 900px){ .custom-grid .grid{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
 @media (max-width: 600px){ .custom-grid .grid{ grid-template-columns:1fr; } }
 
-.product-card { position: relative; border-radius: 10px; overflow: hidden; }
-.product-card img { width: 100%; border-radius: 10px; display: block; }
-.placeholder__img { aspect-ratio:1/1; background:#f2f2f2; border-radius:10px; }
-
-/* ===== QUICK VIEW BUTTON ===== */
-.quick-view {
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%,-50%);
-  width: 32px; height: 32px;
-  border-radius: 50%;
-  background: #f8f8f8e5;
-  color: black; font-size: 18px; font-weight: bold;
-  border: none; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: background .2s ease;
-}
-.quick-view:hover { background: #e0e0e0; }
-
-/* ===== POPUP ===== */
-.popup.hidden{ display:none; }
-.popup { 
-  position: fixed; inset:0; 
-  background: rgba(0,0,0,0.5);
-  display:flex; align-items:center; justify-content:center;
-  z-index:1000; 
-}
-.popup-content { 
-  background:#fff; padding:2rem; border-radius:12px;
-  max-width:700px; width:100%; position:relative; 
-}
-.popup-content .close {
-  position:absolute; top:12px; right:16px;
-  background:none; border:none; font-size:28px;
-  cursor:pointer; color:#000;
-}
-.popup-body { display:flex; gap:2rem; }
-.popup-left img { max-width:220px; border-radius:8px; }
-.popup-right { flex:1; display:flex; flex-direction:column; }
-.popup-price { font-size:18px; font-weight:bold; margin:.5rem 0; }
-.popup-description { font-size:14px; color:#555; margin-bottom:1rem; }
-
-.popup-option { margin-bottom:1rem; }
-.popup-option label { display:block; margin-bottom:.25rem; font-weight:600; }
-.popup-option select, .popup-option button {
-  padding:10px 14px; border:1px solid #ccc; border-radius:6px;
-  cursor:pointer; width:100%;
+.popup.hidden{  
+  display:none;
 }
 
-/* ===== ADD TO CART BUTTON ===== */
-.add-to-cart {
-  display:block; width:100%;
-  padding:14px; margin-top:auto;
-  background:black; color:white;
-  border:none; cursor:pointer;
-  font-weight:bold; border-radius:6px;
-  transition: background .2s;
+.popup{ 
+  position:fixed; 
+  inset:0;
+  background:rgba(0,0,0,.6);  
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
-.add-to-cart:hover { background:#222; }
+
+.popup-content{ 
+  background:#fff; 
+  padding:2rem;
+  max-width:600px; 
+  width:100%;
+  border-radius:12px; 
+  position:relative;
+}
+
+.popup .close{ 
+  position:absolute;
+  top:10px;
+  right:15px;
+  font-size:1.5rem; 
+  background:none;
+  border:0;
+  cursor:pointer;
+}
 </style>
 
 <script src="{{ 'custom-grid.js' | asset_url }}" defer></script>
