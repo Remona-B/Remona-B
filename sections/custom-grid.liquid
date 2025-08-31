@@ -44,9 +44,34 @@
 <div id="product-popup" class="popup hidden" aria-hidden="true">
   <div class="popup-content" role="dialog" aria-modal="true">
     <button class="close" aria-label="Close">&times;</button>
-    <div id="popup-body"></div>
+    
+    <div class="popup-body">
+      <div class="popup-left">
+        <img id="popup-image" src="" alt="">
+      </div>
+      <div class="popup-right">
+        <h3 id="popup-title"></h3>
+        <p id="popup-price"></p>
+        <p id="popup-description"></p>
+
+        <!-- Colors -->
+        <div class="popup-option">
+          <label>Color</label>
+          <div id="popup-colors"></div>
+        </div>
+
+        <!-- Sizes -->
+        <div class="popup-option">
+          <label>Size</label>
+          <select id="popup-sizes"></select>
+        </div>
+
+        <button id="popup-add-to-cart" class="add-to-cart">ADD TO CART →</button>
+      </div>
+    </div>
   </div>
 </div>
+
 
 <style>
   .product-card {
@@ -105,33 +130,50 @@
   display:none;
 }
 
-.popup{ 
-  position:fixed; 
-  inset:0;
-  background:rgba(0,0,0,.6);  
-  display:flex;
-  align-items:center;
-  justify-content:center;
+.popup-body {
+  display: flex;
+  gap: 1.5rem;
 }
 
-.popup-content{ 
-  background:#fff; 
-  padding:2rem;
-  max-width:600px; 
-  width:100%;
-  border-radius:12px; 
-  position:relative;
+.popup-left img {
+  max-width: 150px;
+  border-radius: 8px;
 }
 
-.popup .close{ 
-  position:absolute;
-  top:10px;
-  right:15px;
-  font-size:1.5rem; 
-  background:none;
-  border:0;
-  cursor:pointer;
+.popup-right {
+  flex: 1;
 }
+
+.popup-option {
+  margin: 1rem 0;
+}
+
+#popup-colors button {
+  border: 1px solid #000;
+  background: #fff;
+  padding: 6px 12px;
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+#popup-sizes {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+}
+
+.add-to-cart {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background: black;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 1rem;
+}
+
 </style>
 
 <script src="{{ 'custom-grid.js' | asset_url }}" defer></script>
