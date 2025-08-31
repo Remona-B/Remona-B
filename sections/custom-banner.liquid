@@ -104,7 +104,7 @@
 
 <div class="custom-banner">
 
-  <!-- Top Row (Brand / Topline / Button) -->
+  <!-- Top -->
   <div class="banner-top">
     <div class="brand"><b>{{ section.settings.brand_text }}</b></div>
     <div class="topline">{{ section.settings.topline_text }}</div>
@@ -113,14 +113,12 @@
     {% endif %}
   </div>
 
-  <!-- Top Banner Image -->
+  <!-- Top Image -->
   {% if section.settings.top_image != blank %}
     <div style="text-align: center; margin-bottom: 20px;">
       <img src="{{ section.settings.top_image | image_url: width: 1200 }}" alt="Top Banner" style="max-width: 100%; height: auto;">
     </div>
   {% endif %}
-
-  <!-- Two Column Layout -->
   <div class="banner-columns">
 
     <!-- Left Text Section -->
@@ -159,7 +157,7 @@
 .custom-banner {
   background-size: cover;
   background-position: center;
-  padding: 0 20px 40px; /* no top gap */
+  padding: 0 20px 40px; 
   position: relative;
   max-width: 1400px;
   margin: 0 auto;
@@ -216,7 +214,7 @@
   transform: scale(1.05);
 }
 
-/* Headings now left aligned */
+
 .main-heading {
   font-size: 42px;
   margin: 10px 0 10px;
