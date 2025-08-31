@@ -314,71 +314,75 @@
   height: auto;
 }
 
-/* Mobile Layout */
 @media (max-width: 600px) {
-  /* Reset banner-top */
+  /* Top layout */
   .banner-top {
-    display: block;
-    text-align: center;
-    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+  }
+
+  /* Hamburger menu */
+  .menu-toggle {
+    font-size: 22px;
+    cursor: pointer;
+    border: none;
+    background: none;
   }
 
   .brand {
-    border: none;        /* remove box */
+    border: none; 
     font-size: 18px;
     font-weight: bold;
-    margin-bottom: 10px;
   }
 
+  /* Hide topline + top right button */
   .topline, #btn1 {
-    display: none; /* hide topline + top right button on mobile */
+    display: none;
   }
 
-  /* Make banner image act as background */
-  .banner-columns {
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    background: url('{{ section.settings.top_image | image_url: width: 1200 }}') no-repeat center/cover;
-    padding: 60px 20px;  /* space inside the image */
-    color: #fff;         /* white text for readability */
-    position: relative;
-  }
-
-  .banner-left {
-    max-width: 100%;
-    text-align: center;
-  }
-
+  /* Headings ABOVE image */
   .main-heading {
-    font-size: 26px;
-    color: white;
-    margin-bottom: 10px;
+    font-size: 24px;
+    text-align: center;
+    margin: 15px 0 8px;
+    color: #111;
   }
 
   .subheading {
     font-size: 14px;
-    line-height: 1.4;
-    margin: 0 auto 20px;
-    max-width: 90%;
-    color: white;
-  }
-
-  /* Bottom button centered inside banner */
-  .bottom-btn-wrap {
     text-align: center;
-    margin: 10px auto 0;
+    margin: 0 auto 15px;
+    max-width: 90%;
+    color: #555;
   }
 
-  .btn-animate {
-    padding: 10px 24px;
-    font-size: 14px;
-    background: #000;
+  /* Banner image area smaller */
+  .banner-columns {
+    background: url('{{ section.settings.top_image | image_url: width: 800 }}') no-repeat center/cover;
+    min-height: 180px; /* smaller height */
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    padding: 20px;
+    position: relative;
+  }
+
+  /* Only button inside banner */
+  .bottom-btn-wrap {
+    margin: 0;
+    text-align: center;
+  }
+
+  .bottom-btn-wrap .btn-animate {
+    background: black;
     color: white;
+    padding: 8px 20px;
+    font-size: 13px;
   }
 
-  /* Remove right side image entirely on mobile */
+  /* Hide right image completely */
   .banner-right {
     display: none;
   }
