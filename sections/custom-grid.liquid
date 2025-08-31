@@ -21,12 +21,13 @@
     {% for block in section.blocks %}
       {% assign product = all_products[block.settings.product] %}
       {% if product %}
-        <div class="product-card" data-handle="{{ product.handle }}">
-          <div class="product-image-wrap">
-            <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.title }}">
-           <button class="quick-view" data-handle="{{ product.handle }}">+</button>
-           </div>
+        <div class="product-card">
+           <div class="product-image-wrap">
+               <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.title }}">
+              <button class="quick-view" data-handle="{{ product.handle }}">+</button>
+            </div>
         </div>
+
 
 
       {% else %}
