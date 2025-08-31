@@ -134,6 +134,10 @@
         <p class="subheading">{{ section.settings.subheading }}</p>
       {% endif %}
 
+      {% if section.settings.subheading != blank %}
+        <p class="subheading">{{ section.settings.subheading }}</p>
+      {% endif %}
+
       {% if section.settings.bottom_button_text != blank %}
         <div class="bottom-btn-wrap">
           <a href="{{ section.settings.bottom_button_link }}" class="btn-animate">{{ section.settings.bottom_button_text }}</a>
