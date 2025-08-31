@@ -21,12 +21,13 @@
     {% for block in section.blocks %}
       {% assign product = all_products[block.settings.product] %}
       {% if product %}
-        <div class="product-card" data-handle="{{ product.handle }}" {{ block.shopify_attributes }}>
-           <div class="product-image-wrap">
-              <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.title }}">
-             <button class="quick-view" data-handle="{{ product.handle }}">+</button>
+        <div class="product-card" data-handle="{{ product.handle }}">
+          <div class="product-image-wrap">
+            <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.title }}">
+           <button class="quick-view" data-handle="{{ product.handle }}">+</button>
            </div>
         </div>
+
 
       {% else %}
         <div class="product-card placeholder" {{ block.shopify_attributes }}>
@@ -61,32 +62,40 @@
 
 .product-image-wrap {
   position: relative;
+  display: inline-block;
 }
 
-button.quick-view {
+.product-image-wrap img {
+  display: block;
+  width: 100%;
+  border-radius: 10px;
+}
+
+.quick-view {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 32px;
-  height: 32px;
+  top: 50%;               /* push to vertical center */
+  left: 50%;              /* push to horizontal center */
+  transform: translate(-50%, -50%); /* perfectly center */
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  background: #fff;
-  border: 1px solid #ddd;
-  font-size: 18px;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  font-size: 22px;
   font-weight: bold;
-  line-height: 1;
+  border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all .2s ease;
+  transition: all 0.2s ease;
+  opacity: 0;             /* hidden by default */
 }
 
-button.quick-view:hover {
-  background: #000;
-  color: #fff;
-  border-color: #000;
+.product-image-wrap:hover .quick-view {
+  opacity: 1;             /* show only on hover */
 }
+
 
 .custom-grid .grid{
   display:grid;
