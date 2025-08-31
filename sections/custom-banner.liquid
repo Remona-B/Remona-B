@@ -314,80 +314,16 @@
   height: auto;
 }
 @media (max-width: 600px) {
-  /* Top brand */
-  .banner-top {
-    display: block;
-    text-align: center;
-    margin: 0;
-    padding: 8px 0;
+  /* Hide top_image completely */
+  .custom-banner > div[style*="Top Banner"] {
+    display: none !important;
   }
 
-  .brand {
-    border: none;
-    font-size: 18px;
-    font-weight: bold;
-    margin: 0;
-  }
-
-  /* Hide topline + top button */
-  .topline, #btn1 {
-    display: none;
-  }
-
-  /* Headings below brand */
-  .banner-left {
-    text-align: center;
-    margin: 10px auto;
-  }
-
-  .main-heading {
-    font-size: 22px;
-    margin: 6px 0;
-    color: #111;
-  }
-
-  .subheading {
-    font-size: 14px;
-    line-height: 1.4;
-    margin: 0 auto 15px;
-    max-width: 90%;
-    color: #555;
-  }
-
-  /* Banner image */
+  /* Show only banner-right image */
   .banner-right {
     display: block;
     position: relative;
     text-align: center;
-  }
-
-  .banner-right img {
-    max-width: 100%;
-    height: auto;
-    display: block;
-  }
-
-  /* Button inside banner image (bottom center) */
-  .bottom-btn-wrap {
-    position: absolute;
-    bottom: 12px;
-    left: 50%;
-    transform: translateX(-50%);
-    margin: 0;
-  }
-
-  .bottom-btn-wrap .btn-animate {
-    background: black;
-    color: white;
-    padding: 8px 22px;
-    font-size: 14px;
-  }
-
-  /* Footer */
-  .footer-text {
-    font-size: 12px;
-    padding: 6px;
-    margin-top: 8px;
   }
 }
 
