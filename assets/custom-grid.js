@@ -26,41 +26,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
       popupOptions.innerHTML = "";
 
-      // Assume option1 = Size, option2 = Color (common Shopify setup)
+      // Assume option1 = Size, option2 = Color
       const sizes = [...new Set(product.variants.map(v => v.option1))];
       const colors = [...new Set(product.variants.map(v => v.option2))];
 
-      // Size dropdown
-      if (sizes.length > 1) {
-        const sizeWrapper = document.createElement("div");
-        sizeWrapper.innerHTML = `
-          <label style="display:block;margin:.5rem 0 .25rem;">Size</label>
-          <select data-option="size" style="width:100%;padding:.5rem;border:1px solid #ddd;border-radius:6px;">
-            ${sizes.map(s => `<option value="${s}">${s}</option>`).join("")}
-          </select>
-        `;
-        popupOptions.appendChild(sizeWrapper);
-
-        selectedOptions.size = sizes[0];
-      }
-
-      // Color swatches
+      // ---- COLOR BUTTONS FIRST ----
       if (colors.length > 0) {
         const colorWrapper = document.createElement("div");
         colorWrapper.innerHTML = `<label style="display:block;margin:.5rem 0 .25rem;">Color</label>`;
         const swatchContainer = document.createElement("div");
-        swatchContainer.style.display = "flex";
+        swatchContainer.style.display = "grid";
+        swatchContainer.style.gridTemplateColumns = "1fr 1fr"; // 2 per row
         swatchContainer.style.gap = "8px";
 
         colors.forEach(c => {
           const btn = document.createElement("button");
           btn.textContent = c;
-          btn.style.padding = "6px 12px";
+          btn.style.padding = "10px";
           btn.style.border = "2px solid #ddd";
-          btn.style.borderLeft = `12px solid ${c.toLowerCase()}`; // left border in color
-          btn.style.borderRadius = "6px";
-          btn.style.cursor = "pointer";
+          btn.style.borderLeft = `12px solid ${c.toLowerCase()}`;
           btn.style.background = "#fff";
+          btn.style.cursor = "pointer";
+          btn.style.width = "100%";
+          btn.style.textAlign = "left";
 
           btn.onclick = () => {
             selectedOptions.color = c;
@@ -79,6 +67,20 @@ document.addEventListener('DOMContentLoaded', () => {
         popupOptions.appendChild(colorWrapper);
 
         selectedOptions.color = colors[0];
+      }
+
+      // ---- SIZE DROPDOWN ----
+      if (sizes.length > 1) {
+        const sizeWrapper = document.createElement("div");
+        sizeWrapper.innerHTML = `
+          <label style="display:block;margin:.5rem 0 .25rem;">Size</label>
+          <select data-option="size" style="width:100%;padding:10px;border:1px solid #ddd;">
+            ${sizes.map(s => `<option value="${s}">${s}</option>`).join("")}
+          </select>
+        `;
+        popupOptions.appendChild(sizeWrapper);
+
+        selectedOptions.size = sizes[0];
       }
 
       popup.classList.remove("hidden");
