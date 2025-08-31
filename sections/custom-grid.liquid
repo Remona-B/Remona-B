@@ -1,7 +1,14 @@
 {% schema %}
 {
   "name": "Custom Product Grid",
-  "settings": [],
+  "settings": [
+     {
+      "type": "textarea",
+      "id": "grid_text",
+      "label": "Grid Heading / Note",
+      "default": "Type your custom text here..."
+    }
+  ],
   "blocks": [
     {
       "type": "product",
@@ -24,7 +31,7 @@
               style="width:100%; padding:10px; border:1px solid #ccc; font-size:16px;">
     </textarea>
   </div>
-  
+
   <div class="grid">
     {% for block in section.blocks %}
       {% assign product = all_products[block.settings.product] %}
