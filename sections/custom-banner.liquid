@@ -1,68 +1,3 @@
-<div class="custom-banner">
-
-  <!-- Top Row (Brand / Topline / Button) -->
-  <div class="banner-top">
-    <div class="brand">{{ section.settings.brand_text }}</div>
-    <div class="topline">{{ section.settings.topline_text }}</div>
-    {% if section.settings.button_text != blank %}
-      <a href="{{ section.settings.button_link }}" class="btn-animate">{{ section.settings.button_text }}</a>
-    {% endif %}
-  </div>
-
-  <!-- Top Banner Image -->
-  {% if section.settings.top_image != blank %}
-    <div style="text-align: center; margin-bottom: 20px;">
-      <img src="{{ section.settings.top_image | image_url: width: 1200 }}" alt="Top Banner" style="max-width: 100%; height: auto;">
-    </div>
-  {% endif %}
-
-  <!-- Main Heading -->
-  {% if section.settings.heading != blank %}
-    <h1 class="main-heading">{{ section.settings.heading }}</h1>
-  {% endif %}
-
-  <!-- Subheading -->
-  {% if section.settings.subheading != blank %}
-    <p class="subheading">{{ section.settings.subheading }}</p>
-  {% endif %}
-
-  <!-- Bottom Button (moved below heading + subheading) -->
-  {% if section.settings.bottom_button_text != blank %}
-    <div class="bottom-btn-wrap">
-      <a href="{{ section.settings.bottom_button_link }}" class="btn-animate">{{ section.settings.bottom_button_text }}</a>
-    </div>
-  {% endif %}
-
-  <!-- Two Column Layout -->
-  <div class="banner-columns">
-
-    <!-- Left Text Section -->
-    <div class="banner-left">
-      {% if section.settings.left_heading != blank %}
-        <h2>{{ section.settings.left_heading }}</h2>
-      {% endif %}
-      {% if section.settings.left_button_text != blank and section.settings.left_button_link != blank %}
-        <a href="{{ section.settings.left_button_link }}" class="btn-animate">
-          {{ section.settings.left_button_text }}
-        </a>
-      {% endif %}
-      {% if section.settings.left_description != blank %}
-        <p class="desc">{{ section.settings.left_description }}</p>
-      {% endif %}
-    </div>
-
-    <!-- Right Side Image -->
-    {% if section.settings.side_image != blank %}
-      <div class="banner-right">
-        <img src="{{ section.settings.side_image | image_url: width: 600 }}" alt="Side Banner">
-      </div>
-    {% endif %}
-  </div>
-
-  <!-- Footer Text (fixed at bottom center) -->
-  <div class="footer-text">{{ section.settings.footer_text }}</div>
-</div>
-
 {% schema %}
 {
   "name": "Custom Banner",
@@ -167,11 +102,74 @@
 }
 {% endschema %}
 
+<div class="custom-banner">
+
+  <!-- Top Row (Brand / Topline / Button) -->
+  <div class="banner-top">
+    <div class="brand">{{ section.settings.brand_text }}</div>
+    <div class="topline">{{ section.settings.topline_text }}</div>
+    {% if section.settings.button_text != blank %}
+      <a href="{{ section.settings.button_link }}" class="btn-animate">{{ section.settings.button_text }}</a>
+    {% endif %}
+  </div>
+
+  <!-- Top Banner Image -->
+  {% if section.settings.top_image != blank %}
+    <div style="text-align: center; margin-bottom: 20px;">
+      <img src="{{ section.settings.top_image | image_url: width: 1200 }}" alt="Top Banner" style="max-width: 100%; height: auto;">
+    </div>
+  {% endif %}
+
+  <!-- Two Column Layout -->
+  <div class="banner-columns">
+
+    <!-- Left Text Section -->
+    <div class="banner-left">
+
+      {% if section.settings.heading != blank %}
+        <h1 class="main-heading">{{ section.settings.heading }}</h1>
+      {% endif %}
+
+      {% if section.settings.subheading != blank %}
+        <p class="subheading">{{ section.settings.subheading }}</p>
+      {% endif %}
+
+      {% if section.settings.bottom_button_text != blank %}
+        <div class="bottom-btn-wrap">
+          <a href="{{ section.settings.bottom_button_link }}" class="btn-animate">{{ section.settings.bottom_button_text }}</a>
+        </div>
+      {% endif %}
+
+      {% if section.settings.left_heading != blank %}
+        <h2>{{ section.settings.left_heading }}</h2>
+      {% endif %}
+      {% if section.settings.left_button_text != blank and section.settings.left_button_link != blank %}
+        <a href="{{ section.settings.left_button_link }}" class="btn-animate">
+          {{ section.settings.left_button_text }}
+        </a>
+      {% endif %}
+      {% if section.settings.left_description != blank %}
+        <p class="desc">{{ section.settings.left_description }}</p>
+      {% endif %}
+    </div>
+
+    <!-- Right Side Image -->
+    {% if section.settings.side_image != blank %}
+      <div class="banner-right">
+        <img src="{{ section.settings.side_image | image_url: width: 600 }}" alt="Side Banner">
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- Footer Text (bottom center) -->
+  <div class="footer-text">{{ section.settings.footer_text }}</div>
+</div>
+
 <style>
 .custom-banner {
   background-size: cover;
   background-position: center;
-  padding: 0 20px 40px; /* 🔹 removed top padding */
+  padding: 0 20px 40px; /* no top gap */
   position: relative;
   max-width: 1400px;
   margin: 0 auto;
@@ -182,7 +180,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px; /* 🔹 reduced space */
+  margin-bottom: 15px;
   font-weight: bold;
 }
 
@@ -210,31 +208,29 @@
   border-radius: 4px;
   transition: all 0.3s ease;
 }
-
 .btn-animate:hover {
   background: #ffeb3b;
   color: #fff;
   transform: scale(1.05);
 }
 
-/* Headings */
+/* Headings now left aligned */
 .main-heading {
   font-size: 42px;
   margin: 10px 0 10px;
   font-weight: bold;
-  text-align: center;
+  text-align: left;  /* 🔹 changed to left */
 }
-
 .subheading {
   font-size: 16px;
   max-width: 600px;
-  margin: 0 auto 20px;
-  text-align: center;
+  margin: 0 0 20px;
+  text-align: left;  /* 🔹 changed to left */
 }
 
-/* Bottom Button wrapper */
+/* Button wrap under subheading */
 .bottom-btn-wrap {
-  text-align: center;
+  text-align: left;  /* 🔹 align left */
   margin: 20px 0 40px;
 }
 
@@ -256,34 +252,28 @@
   flex-wrap: wrap;
   margin-top: 30px;
 }
-
 .banner-left {
   flex: 1;
   min-width: 300px;
   max-width: 600px;
   text-align: left;
 }
-
 .banner-left h2 {
-  font-size: 36px;
+  font-size: 28px;
   font-weight: 700;
   margin-bottom: 20px;
 }
-
 .banner-left .desc {
   font-size: 18px;
   margin-bottom: 30px;
   line-height: 1.6;
   color: #333;
-  text-align: left;
 }
-
 .banner-right {
   flex: 1;
   text-align: center;
   min-width: 300px;
 }
-
 .banner-right img {
   max-width: 100%;
   height: auto;
@@ -291,7 +281,6 @@
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   transition: transform 0.3s ease;
 }
-
 .banner-right img:hover {
   transform: scale(1.03);
 }
