@@ -11,14 +11,26 @@
 
   <!-- Top Banner Image -->
   {% if section.settings.top_image != blank %}
-    <div style="text-align: center; margin-bottom: 40px;">
+    <div style="text-align: center; margin-bottom: 20px;">
       <img src="{{ section.settings.top_image | image_url: width: 1200 }}" alt="Top Banner" style="max-width: 100%; height: auto;">
     </div>
   {% endif %}
 
-  <!-- Bottom Button -->
+  <!-- Main Heading -->
+  {% if section.settings.heading != blank %}
+    <h1 class="main-heading">{{ section.settings.heading }}</h1>
+  {% endif %}
+
+  <!-- Subheading -->
+  {% if section.settings.subheading != blank %}
+    <p class="subheading">{{ section.settings.subheading }}</p>
+  {% endif %}
+
+  <!-- Bottom Button (moved below heading + subheading) -->
   {% if section.settings.bottom_button_text != blank %}
-    <a href="{{ section.settings.bottom_button_link }}" class="btn-animate">{{ section.settings.bottom_button_text }}</a>
+    <div class="bottom-btn-wrap">
+      <a href="{{ section.settings.bottom_button_link }}" class="btn-animate">{{ section.settings.bottom_button_text }}</a>
+    </div>
   {% endif %}
 
   <!-- Two Column Layout -->
@@ -26,7 +38,6 @@
 
     <!-- Left Text Section -->
     <div class="banner-left">
-      
       {% if section.settings.left_heading != blank %}
         <h2>{{ section.settings.left_heading }}</h2>
       {% endif %}
@@ -48,7 +59,7 @@
     {% endif %}
   </div>
 
-  <!-- Footer Text -->
+  <!-- Footer Text (fixed at bottom center) -->
   <div class="footer-text">{{ section.settings.footer_text }}</div>
 </div>
 
@@ -157,10 +168,10 @@
 {% endschema %}
 
 <style>
-  .custom-banner {
+.custom-banner {
   background-size: cover;
   background-position: center;
-  padding: 60px 20px;
+  padding: 0 20px 40px; /* 🔹 removed top padding */
   position: relative;
   max-width: 1400px;
   margin: 0 auto;
@@ -171,7 +182,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
+  margin-bottom: 15px; /* 🔹 reduced space */
   font-weight: bold;
 }
 
@@ -191,8 +202,8 @@
 /* Buttons */
 .btn-animate {
   display: inline-block;
-  background: #000;        /* black default */
-  color: #fff;             /* white text */
+  background: #000;
+  color: #fff;
   padding: 12px 28px;
   font-weight: bold;
   text-decoration: none;
@@ -201,16 +212,15 @@
 }
 
 .btn-animate:hover {
-  background: #ffeb3b;     /* yellow */
-  color: #fff;             /* white text */
+  background: #ffeb3b;
+  color: #fff;
   transform: scale(1.05);
 }
-
 
 /* Headings */
 .main-heading {
   font-size: 42px;
-  margin: 20px 0 10px;
+  margin: 10px 0 10px;
   font-weight: bold;
   text-align: center;
 }
@@ -222,14 +232,19 @@
   text-align: center;
 }
 
+/* Bottom Button wrapper */
+.bottom-btn-wrap {
+  text-align: center;
+  margin: 20px 0 40px;
+}
+
 /* Footer */
 .footer-text {
-  margin-top: 30px;
   font-size: 12px;
   border-top: 1px solid #000;
-  display: inline-block;
   padding-top: 5px;
   text-align: center;
+  margin-top: 40px;
 }
 
 /* Two-column layout */
@@ -239,14 +254,14 @@
   justify-content: space-between;
   gap: 40px;
   flex-wrap: wrap;
-  margin-top: 50px;
+  margin-top: 30px;
 }
 
 .banner-left {
   flex: 1;
   min-width: 300px;
   max-width: 600px;
-  text-align: left; /* <-- force left alignment */
+  text-align: left;
 }
 
 .banner-left h2 {
