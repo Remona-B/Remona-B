@@ -11,20 +11,19 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentProduct = null;
   let selectedOptions = {};
 
-  // Open popup
+  // --- OPEN POPUP ---
   const openPopup = async (handle) => {
     try {
       const res = await fetch(`/products/${handle}.js`);
       const product = await res.json();
       currentProduct = product;
+      selectedOptions = {}; // reset on each open
 
       // Fill content
       popupImage.src = product.images[0] || '';
       popupTitle.textContent = product.title;
       popupPrice.textContent = `€ ${(product.price / 100).toFixed(2)}`;
-
-
-      popupDesc.textContent = "This one-piece swimsuit is crafted from jersey featuring an allover micro Monogram motif in relief.";
+      popupDesc.innerHTML = product.description || ""; // ✅ dynamic
 
       popupOptions.innerHTML = "";
 
@@ -32,13 +31,13 @@ document.addEventListener('DOMContentLoaded', () => {
       const sizes = [...new Set(product.variants.map(v => v.option1))];
       const colors = [...new Set(product.variants.map(v => v.option2))];
 
-      // ---- COLOR BUTTONS FIRST ----
+      // ---- COLOR BUTTONS ----
       if (colors.length > 0) {
         const colorWrapper = document.createElement("div");
         colorWrapper.innerHTML = `<label style="display:block;margin:.5rem 0 .25rem;">Color</label>`;
         const swatchContainer = document.createElement("div");
         swatchContainer.style.display = "grid";
-        swatchContainer.style.gridTemplateColumns = "1fr 1fr"; // 2 per row
+        swatchContainer.style.gridTemplateColumns = "1fr 1fr";
         swatchContainer.style.gap = "1px";
 
         colors.forEach(c => {
@@ -55,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
           btn.onclick = () => {
             selectedOptions.color = c;
 
-            // Highlight selected
+            // Highlight selection
             swatchContainer.querySelectorAll("button").forEach(b => {
               b.style.borderColor = "#ddd";
             });
@@ -68,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
         colorWrapper.appendChild(swatchContainer);
         popupOptions.appendChild(colorWrapper);
 
-        selectedOptions.color = colors[0];
+        selectedOptions.color = colors[0]; // default
       }
 
       // ---- SIZE DROPDOWN ----
@@ -82,24 +81,26 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         popupOptions.appendChild(sizeWrapper);
 
-        selectedOptions.size = sizes[0];
+        selectedOptions.size = sizes[0]; // default
       }
 
       popup.classList.remove("hidden");
-
     } catch (err) {
       console.error("Error loading product:", err);
     }
   };
 
-  // Get selected variant
+  // --- GET SELECTED VARIANT ---
   const getSelectedVariantId = () => {
     if (!currentProduct) return null;
+
+    // Update from selects
     const selects = popupOptions.querySelectorAll("select[data-option]");
     selects.forEach(s => {
       selectedOptions[s.dataset.option] = s.value;
     });
 
+    // Match variant
     const variant = currentProduct.variants.find(v =>
       (!selectedOptions.size || v.option1 === selectedOptions.size) &&
       (!selectedOptions.color || v.option2 === selectedOptions.color)
@@ -107,25 +108,53 @@ document.addEventListener('DOMContentLoaded', () => {
     return (variant || currentProduct.variants[0]).id;
   };
 
-  // Add to cart
+  // --- ADD TO CART ---
   addBtn.addEventListener("click", async () => {
     const variantId = getSelectedVariantId();
     if (!variantId) return;
 
-    await fetch("/cart/add.js", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id: variantId, quantity: 1 })
-    });
+    try {
+      // Add selected product
+      await fetch("/cart/add.js", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: variantId, quantity: 1 })
+      });
+
+      // Rule: If Black + Medium → also add Soft Winter Jacket
+      if (
+        selectedOptions.color?.toLowerCase() === "black" &&
+        selectedOptions.size?.toLowerCase() === "medium"
+      ) {
+        const jacketHandle = "soft-winter-jacket"; // ✅ replace with correct handle
+        const res = await fetch(`/products/${jacketHandle}.js`);
+        const jacket = await res.json();
+        const jacketVariantId = jacket.variants[0].id; // default to first variant
+
+        await fetch("/cart/add.js", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: jacketVariantId, quantity: 1 })
+        });
+      }
+    } catch (err) {
+      console.error("Error adding to cart:", err);
+    }
 
     popup.classList.add("hidden");
   });
 
-  // Attach quick-view buttons
+  // --- EVENT BINDINGS ---
   document.querySelectorAll(".quick-view").forEach(btn => {
     btn.addEventListener("click", () => openPopup(btn.dataset.handle));
   });
 
-  // Close popup
   closeBtn?.addEventListener("click", () => popup.classList.add("hidden"));
+
+  // Close with ESC key
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !popup.classList.contains("hidden")) {
+      popup.classList.add("hidden");
+    }
+  });
 });
