@@ -146,12 +146,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!variantId) return;
 
     try {
+      const addedItems = [];
+
       // Add chosen product
       await fetch("/cart/add.js", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id: variantId, quantity: 1 })
       });
+      addedItems.push(currentProduct.title);
 
       // Special exam rule: if user chose Black + Medium → also add jacket
       if (
@@ -168,12 +171,17 @@ document.addEventListener('DOMContentLoaded', () => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ id: jacketVariantId, quantity: 1 })
         });
+        addedItems.push(jacket.title);
       }
+
+      // Show confirmation popup
+      showCartPopup(addedItems);
+
     } catch (err) {
       console.error("Error adding to cart:", err);
     }
 
-    popup.classList.add("hidden"); // close popup
+    popup.classList.add("hidden"); // close product popup
   });
 
   // Attach quick-view buttons (one per product card)
@@ -191,3 +199,37 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+
+// --- Confirmation popup (lightweight) ---
+const cartPopup = document.createElement("div");
+cartPopup.id = "cart-popup";
+cartPopup.style.position = "fixed";
+cartPopup.style.bottom = "20px";
+cartPopup.style.right = "20px";
+cartPopup.style.padding = "16px 20px";
+cartPopup.style.background = "#000";
+cartPopup.style.color = "#fff";
+cartPopup.style.borderRadius = "8px";
+cartPopup.style.fontSize = "14px";
+cartPopup.style.boxShadow = "0 4px 12px rgba(0,0,0,0.3)";
+cartPopup.style.opacity = "0";
+cartPopup.style.transition = "opacity 0.3s ease";
+cartPopup.style.zIndex = "9999";
+document.body.appendChild(cartPopup);
+
+/**
+ * Show confirmation popup
+ * @param {string[]} items - array of item titles added
+ */
+const showCartPopup = (items) => {
+  cartPopup.innerHTML = `
+    <strong>Added to cart:</strong><br>
+    ${items.map(i => `• ${i}`).join("<br>")}
+  `;
+  cartPopup.style.opacity = "1";
+
+  // Auto-hide after 3 seconds
+  setTimeout(() => {
+    cartPopup.style.opacity = "0";
+  }, 3000);
+};
