@@ -103,7 +103,7 @@
 {% endschema %}
 
 <div class="custom-banner">
-  <div class=header>
+  
   <div class="hamburger">☰</div>
   <!-- Top -->
   <div class="banner-top">
@@ -113,7 +113,7 @@
       <a href="{{ section.settings.button_link }}" class="btn-animate" id="btn1">{{ section.settings.button_text }}→</a>
     {% endif %}
   </div>
-  </div>
+
   <!-- Top Image -->
   {% if section.settings.top_image != blank %}
     <div style="text-align: center; margin-bottom: 20px;">
@@ -168,9 +168,6 @@
   display: none;
 }
 
-.header{
-  background: #F7F7F7;
-}
 /* Top row */
 .banner-top {
   display: flex;
