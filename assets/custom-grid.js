@@ -10,8 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const addBtn = document.getElementById('popup-add');
   const closeBtn = popup.querySelector('.close');
 
-  let currentProduct = null;   // will hold the active product JSON
-  let selectedOptions = {};    // track user’s choices (color, size, etc.)
+  let currentProduct = null;   // holds the active product JSON
+  let selectedOptions = {};    // stores user’s choices (color, size, etc.)
 
   /**
    * Opens the product popup and fills it with product data
@@ -19,21 +19,22 @@ document.addEventListener('DOMContentLoaded', () => {
    */
   const openPopup = async (handle) => {
     try {
-      // Fetch product details via Shopify’s JS API, the CSV for example
+      // Fetch product details from Shopify’s product.js endpoint
       const res = await fetch(`/products/${handle}.js`);
       const product = await res.json();
       currentProduct = product;
-      selectedOptions = {}; // reset options every time popup opens
+      selectedOptions = {}; // reset every time popup opens
 
-      // Fill in the popup with product data
+      // Fill in popup content
       popupImage.src = product.images[0] || '';
       popupTitle.textContent = product.title;
       popupPrice.textContent = `€ ${(product.price / 100).toFixed(2)}`;
-      popupDesc.innerHTML = product.description || ""; // dynamic description fetched from the CSV
+      popupDesc.innerHTML = product.description || ""; 
 
-      popupOptions.innerHTML = ""; // clear old options
+      // Clear old option elements
+      popupOptions.innerHTML = "";
 
-      // Assume Shopify variant structure: option1 = size, option2 = color
+      // Shopify convention: option1 = size, option2 = color
       const sizes = [...new Set(product.variants.map(v => v.option1))];
       const colors = [...new Set(product.variants.map(v => v.option2))];
 
@@ -47,28 +48,39 @@ document.addEventListener('DOMContentLoaded', () => {
         swatchContainer.style.gridTemplateColumns = "1fr 1fr"; // two buttons per row
         swatchContainer.style.gap = "1px";
 
+        let activeColorBtn = null; // keep track of selected button
+
         colors.forEach(c => {
           const btn = document.createElement("button");
           btn.textContent = c;
           btn.style.padding = "10px";
           btn.style.border = "2px solid #ddd";
-          btn.style.borderLeft = `12px solid ${c.toLowerCase()}`; // simple color preview
+          btn.style.borderLeft = `12px solid ${c.toLowerCase()}`; // mini color preview
           btn.style.background = "#fff";
+          btn.style.color = "#000";
           btn.style.cursor = "pointer";
           btn.style.width = "100%";
           btn.style.textAlign = "left";
+          btn.style.transition = "all 0.3s ease"; // smooth effect
 
           // Handle user click
           btn.onclick = () => {
             selectedOptions.color = c;
 
-            // reset all to grey
-            swatchContainer.querySelectorAll("button").forEach(b => {
-              b.style.borderColor = "#ddd";
-            });
-            // highlight selected
+            // reset previous active button
+            if (activeColorBtn) {
+              activeColorBtn.style.background = "#fff";
+              activeColorBtn.style.color = "#000";
+              activeColorBtn.style.borderColor = "#ddd";
+            }
+
+            // highlight current button
             btn.style.background = "black";
-            btn.style.color="white";
+            btn.style.color = "white";
+            btn.style.borderColor = "black";
+
+            // update active reference
+            activeColorBtn = btn;
           };
 
           swatchContainer.appendChild(btn);
@@ -77,8 +89,10 @@ document.addEventListener('DOMContentLoaded', () => {
         colorWrapper.appendChild(swatchContainer);
         popupOptions.appendChild(colorWrapper);
 
-        // pre-select first color by default
+        // Pre-select first color by default
         selectedOptions.color = colors[0];
+        // Trigger click on first button so it looks selected
+        swatchContainer.querySelector("button")?.click();
       }
 
       // --- Render size dropdown ---
@@ -92,11 +106,11 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         popupOptions.appendChild(sizeWrapper);
 
-        // pre-select first size
+        // Pre-select first size
         selectedOptions.size = sizes[0];
       }
 
-      // Show the popup
+      // Show popup
       popup.classList.remove("hidden");
     } catch (err) {
       console.error("Error loading product:", err);
@@ -109,12 +123,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const getSelectedVariantId = () => {
     if (!currentProduct) return null;
 
-    // Check dropdowns in case user changed size
+    // Check dropdowns (in case user changed size)
     popupOptions.querySelectorAll("select[data-option]").forEach(s => {
       selectedOptions[s.dataset.option] = s.value;
     });
 
-    // Find a matching variant (size + color)
+    // Match variant (size + color)
     const variant = currentProduct.variants.find(v =>
       (!selectedOptions.size || v.option1 === selectedOptions.size) &&
       (!selectedOptions.color || v.option2 === selectedOptions.color)
@@ -125,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /**
    * Add selected product to Shopify cart
-   * Also adds "Soft Winter Jacket" if rules match
+   * Also adds "Soft Winter Jacket" if rule matches
    */
   addBtn.addEventListener("click", async () => {
     const variantId = getSelectedVariantId();
@@ -139,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
         body: JSON.stringify({ id: variantId, quantity: 1 })
       });
 
-      // hiring exam rule: add jacket if user chose Black + Medium
+      // Special exam rule: if user chose Black + Medium → also add jacket
       if (
         selectedOptions.color?.toLowerCase() === "black" &&
         selectedOptions.size?.toLowerCase() === "medium"
