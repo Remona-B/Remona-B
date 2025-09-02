@@ -34,81 +34,76 @@ document.addEventListener('DOMContentLoaded', () => {
       // Clear old option elements
       popupOptions.innerHTML = "";
 
-      // Shopify convention: option1 = size, option2 = color
-      const sizes = [...new Set(product.variants.map(v => v.option1))];
-      const colors = [...new Set(product.variants.map(v => v.option2))];
+      // --- Dynamically render product options (Size, Color, etc.) ---
+      product.options.forEach((opt, idx) => {
+        const name = opt.name.toLowerCase();
 
-      // --- Render color swatches as buttons ---
-      if (colors.length > 0) {
-        const colorWrapper = document.createElement("div");
-        colorWrapper.innerHTML = `<label>Color</label>`;
+        if (name === "color") {
+          // Render colors as swatches
+          const colorWrapper = document.createElement("div");
+          colorWrapper.innerHTML = `<label>Color</label>`;
 
-        const swatchContainer = document.createElement("div");
-        swatchContainer.style.display = "grid";
-        swatchContainer.style.gridTemplateColumns = "1fr 1fr"; // two buttons per row
-        swatchContainer.style.gap = "1px";
+          const swatchContainer = document.createElement("div");
+          swatchContainer.style.display = "grid";
+          swatchContainer.style.gridTemplateColumns = "1fr 1fr"; // two buttons per row
+          swatchContainer.style.gap = "4px";
 
-        let activeColorBtn = null; // keep track of selected button
+          let activeColorBtn = null;
 
-        colors.forEach(c => {
-          const btn = document.createElement("button");
-          btn.textContent = c;
-          btn.style.padding = "10px";
-          btn.style.border = "2px solid #ddd";
-          btn.style.borderLeft = `12px solid ${c.toLowerCase()}`; // mini color preview
-          btn.style.background = "#fff";
-          btn.style.color = "#000";
-          btn.style.cursor = "pointer";
-          btn.style.width = "100%";
-          btn.style.textAlign = "left";
-          btn.style.transition = "all 0.3s ease"; // smooth effect
+          opt.values.forEach(c => {
+            const btn = document.createElement("button");
+            btn.textContent = c;
+            btn.style.padding = "10px";
+            btn.style.border = "2px solid #ddd";
+            btn.style.borderLeft = `12px solid ${c.toLowerCase()}`;
+            btn.style.background = "#fff";
+            btn.style.color = "#000";
+            btn.style.cursor = "pointer";
+            btn.style.width = "100%";
+            btn.style.textAlign = "left";
+            btn.style.transition = "all 0.3s ease";
 
-          // Handle user click
-          btn.onclick = () => {
-            selectedOptions.color = c;
+            btn.onclick = () => {
+              selectedOptions.color = c;
 
-            // reset previous active button
-            if (activeColorBtn) {
-              activeColorBtn.style.background = "#fff";
-              activeColorBtn.style.color = "#000";
-              activeColorBtn.style.borderColor = "#ddd";
-            }
+              if (activeColorBtn) {
+                activeColorBtn.style.background = "#fff";
+                activeColorBtn.style.color = "#000";
+                activeColorBtn.style.borderColor = "#ddd";
+              }
 
-            // highlight current button
-            btn.style.background = "black";
-            btn.style.color = "white";
-            btn.style.borderColor = "black";
+              btn.style.background = "black";
+              btn.style.color = "white";
+              btn.style.borderColor = "black";
+              activeColorBtn = btn;
+            };
 
-            // update active reference
-            activeColorBtn = btn;
-          };
+            swatchContainer.appendChild(btn);
+          });
 
-          swatchContainer.appendChild(btn);
-        });
+          colorWrapper.appendChild(swatchContainer);
+          popupOptions.appendChild(colorWrapper);
 
-        colorWrapper.appendChild(swatchContainer);
-        popupOptions.appendChild(colorWrapper);
+          // Preselect first color
+          selectedOptions.color = opt.values[0];
+          swatchContainer.querySelector("button")?.click();
+        }
 
-        // Pre-select first color by default
-        selectedOptions.color = colors[0];
-        // Trigger click on first button so it looks selected
-        swatchContainer.querySelector("button")?.click();
-      }
+        if (name === "size") {
+          // Render sizes as dropdown
+          const sizeWrapper = document.createElement("div");
+          sizeWrapper.innerHTML = `
+            <label>Size</label>
+            <select data-option="size" style="width:100%;padding:10px;border:1px solid #ddd;">
+              ${opt.values.map(s => `<option value="${s}">${s}</option>`).join("")}
+            </select>
+          `;
+          popupOptions.appendChild(sizeWrapper);
 
-      // --- Render size dropdown ---
-      if (sizes.length > 1) {
-        const sizeWrapper = document.createElement("div");
-        sizeWrapper.innerHTML = `
-          <label>Size</label>
-          <select data-option="size" style="width:100%;padding:10px;border:1px solid #ddd;">
-            ${sizes.map(s => `<option value="${s}">${s}</option>`).join("")}
-          </select>
-        `;
-        popupOptions.appendChild(sizeWrapper);
-
-        // Pre-select first size
-        selectedOptions.size = sizes[0];
-      }
+          // Preselect first size
+          selectedOptions.size = opt.values[0];
+        }
+      });
 
       // Show popup
       popup.classList.remove("hidden");
@@ -123,12 +118,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const getSelectedVariantId = () => {
     if (!currentProduct) return null;
 
-    // Check dropdowns (in case user changed size)
+    // Update selectedOptions from dropdowns
     popupOptions.querySelectorAll("select[data-option]").forEach(s => {
       selectedOptions[s.dataset.option] = s.value;
     });
 
-    // Match variant (size + color)
+    // Match variant
     const variant = currentProduct.variants.find(v =>
       (!selectedOptions.size || v.option1 === selectedOptions.size) &&
       (!selectedOptions.color || v.option2 === selectedOptions.color)
@@ -156,10 +151,11 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       addedItems.push(currentProduct.title);
 
-      // Special exam rule: if user chose Black + Medium → also add jacket
+      // Special exam rule: Medium + Black or Medium + White → add jacket
       if (
-        selectedOptions.color?.toLowerCase() === "black" &&
-        selectedOptions.size?.toLowerCase() === "medium"
+        selectedOptions.size?.toLowerCase() === "medium" &&
+        (selectedOptions.color?.toLowerCase() === "black" ||
+         selectedOptions.color?.toLowerCase() === "white")
       ) {
         const jacketHandle = "soft-winter-jacket"; // replace with exact Shopify handle
         const res = await fetch(`/products/${jacketHandle}.js`);
@@ -199,6 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+
 // --- Confirmation popup  ---
 const cartPopup = document.createElement("div");
 cartPopup.id = "cart-popup";
@@ -216,7 +213,7 @@ cartPopup.style.opacity = "0";
 cartPopup.style.transition = "opacity 0.3s ease";
 cartPopup.style.zIndex = "999";
 cartPopup.style.textAlign = "center";
-cartPopup.style.maxWidth = "300px";   // smaller width
+cartPopup.style.maxWidth = "300px";
 cartPopup.style.wordWrap = "break-word";
 document.body.appendChild(cartPopup);
 
@@ -230,9 +227,13 @@ const showCartPopup = (items) => {
     ${items.map(i => `• ${i}`).join("<br>")}
   `;
 
-  // Check if jacket was added
-  if (items.includes("Soft Winter Jacket")) {
-    message += `<br><br><em>Because you selected <strong>Black + Medium</strong>, the Soft Winter Jacket was added automatically 🎉</em>`;
+  // Add rule explanation if triggered
+  if (
+    selectedOptions.size?.toLowerCase() === "medium" &&
+    (selectedOptions.color?.toLowerCase() === "black" ||
+     selectedOptions.color?.toLowerCase() === "white")
+  ) {
+    message += `<br><br><em>Because you selected <strong>${selectedOptions.color} + Medium</strong>, the Soft Winter Jacket was added automatically 🎉</em>`;
   }
 
   cartPopup.innerHTML = message;
