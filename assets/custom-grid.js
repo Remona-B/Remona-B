@@ -1,4 +1,6 @@
+// Run only after the page has fully loaded
 document.addEventListener('DOMContentLoaded', () => {
+  // Grab references to popup elements once
   const popup = document.getElementById('product-popup');
   const popupImage = document.getElementById('popup-image');
   const popupTitle = document.getElementById('popup-title');
@@ -8,36 +10,41 @@ document.addEventListener('DOMContentLoaded', () => {
   const addBtn = document.getElementById('popup-add');
   const closeBtn = popup.querySelector('.close');
 
-  let currentProduct = null;
-  let selectedOptions = {};
+  let currentProduct = null;   // will hold the active product JSON
+  let selectedOptions = {};    // track user’s choices (color, size, etc.)
 
-  // --- OPEN POPUP ---
+  /**
+   * Opens the product popup and fills it with product data
+   * @param {string} handle - Shopify product handle
+   */
   const openPopup = async (handle) => {
     try {
+      // Fetch product details via Shopify’s JS API, the CSV for example
       const res = await fetch(`/products/${handle}.js`);
       const product = await res.json();
       currentProduct = product;
-      selectedOptions = {}; // reset on each open
+      selectedOptions = {}; // reset options every time popup opens
 
-      // Fill content
+      // Fill in the popup with product data
       popupImage.src = product.images[0] || '';
       popupTitle.textContent = product.title;
       popupPrice.textContent = `€ ${(product.price / 100).toFixed(2)}`;
-      popupDesc.innerHTML = product.description || ""; // ✅ dynamic
+      popupDesc.innerHTML = product.description || ""; // dynamic description fetched from the CSV
 
-      popupOptions.innerHTML = "";
+      popupOptions.innerHTML = ""; // clear old options
 
-      // Assume option1 = Size, option2 = Color
+      // Assume Shopify variant structure: option1 = size, option2 = color
       const sizes = [...new Set(product.variants.map(v => v.option1))];
       const colors = [...new Set(product.variants.map(v => v.option2))];
 
-      // ---- COLOR BUTTONS ----
+      // --- Render color swatches as buttons ---
       if (colors.length > 0) {
         const colorWrapper = document.createElement("div");
-        colorWrapper.innerHTML = `<label style="display:block;margin:.5rem 0 .25rem;">Color</label>`;
+        colorWrapper.innerHTML = `<label>Color</label>`;
+
         const swatchContainer = document.createElement("div");
         swatchContainer.style.display = "grid";
-        swatchContainer.style.gridTemplateColumns = "1fr 1fr";
+        swatchContainer.style.gridTemplateColumns = "1fr 1fr"; // two buttons per row
         swatchContainer.style.gap = "1px";
 
         colors.forEach(c => {
@@ -45,20 +52,23 @@ document.addEventListener('DOMContentLoaded', () => {
           btn.textContent = c;
           btn.style.padding = "10px";
           btn.style.border = "2px solid #ddd";
-          btn.style.borderLeft = `12px solid ${c.toLowerCase()}`;
+          btn.style.borderLeft = `12px solid ${c.toLowerCase()}`; // simple color preview
           btn.style.background = "#fff";
           btn.style.cursor = "pointer";
           btn.style.width = "100%";
           btn.style.textAlign = "left";
 
+          // Handle user click
           btn.onclick = () => {
             selectedOptions.color = c;
 
-            // Highlight selection
+            // reset all to grey
             swatchContainer.querySelectorAll("button").forEach(b => {
               b.style.borderColor = "#ddd";
             });
-            btn.style.borderColor = "#000";
+            // highlight selected
+            btn.style.background = "black";
+            btn.style.color="white";
           };
 
           swatchContainer.appendChild(btn);
@@ -67,69 +77,77 @@ document.addEventListener('DOMContentLoaded', () => {
         colorWrapper.appendChild(swatchContainer);
         popupOptions.appendChild(colorWrapper);
 
-        selectedOptions.color = colors[0]; // default
+        // pre-select first color by default
+        selectedOptions.color = colors[0];
       }
 
-      // ---- SIZE DROPDOWN ----
+      // --- Render size dropdown ---
       if (sizes.length > 1) {
         const sizeWrapper = document.createElement("div");
         sizeWrapper.innerHTML = `
-          <label style="display:block;margin:.5rem 0 .25rem;">Size</label>
+          <label>Size</label>
           <select data-option="size" style="width:100%;padding:10px;border:1px solid #ddd;">
             ${sizes.map(s => `<option value="${s}">${s}</option>`).join("")}
           </select>
         `;
         popupOptions.appendChild(sizeWrapper);
 
-        selectedOptions.size = sizes[0]; // default
+        // pre-select first size
+        selectedOptions.size = sizes[0];
       }
 
+      // Show the popup
       popup.classList.remove("hidden");
     } catch (err) {
       console.error("Error loading product:", err);
     }
   };
 
-  // --- GET SELECTED VARIANT ---
+  /**
+   * Finds the correct variant ID based on selected options
+   */
   const getSelectedVariantId = () => {
     if (!currentProduct) return null;
 
-    // Update from selects
-    const selects = popupOptions.querySelectorAll("select[data-option]");
-    selects.forEach(s => {
+    // Check dropdowns in case user changed size
+    popupOptions.querySelectorAll("select[data-option]").forEach(s => {
       selectedOptions[s.dataset.option] = s.value;
     });
 
-    // Match variant
+    // Find a matching variant (size + color)
     const variant = currentProduct.variants.find(v =>
       (!selectedOptions.size || v.option1 === selectedOptions.size) &&
       (!selectedOptions.color || v.option2 === selectedOptions.color)
     );
+
     return (variant || currentProduct.variants[0]).id;
   };
 
-  // --- ADD TO CART ---
+  /**
+   * Add selected product to Shopify cart
+   * Also adds "Soft Winter Jacket" if rules match
+   */
   addBtn.addEventListener("click", async () => {
     const variantId = getSelectedVariantId();
     if (!variantId) return;
 
     try {
-      // Add selected product
+      // Add chosen product
       await fetch("/cart/add.js", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id: variantId, quantity: 1 })
       });
 
-      // Rule: If Black + Medium → also add Soft Winter Jacket
+      // hiring exam rule: add jacket if user chose Black + Medium
       if (
         selectedOptions.color?.toLowerCase() === "black" &&
         selectedOptions.size?.toLowerCase() === "medium"
       ) {
-        const jacketHandle = "soft-winter-jacket"; // ✅ replace with correct handle
+        const jacketHandle = "soft-winter-jacket"; // replace with exact Shopify handle
         const res = await fetch(`/products/${jacketHandle}.js`);
         const jacket = await res.json();
-        const jacketVariantId = jacket.variants[0].id; // default to first variant
+        const jacketVariantId = jacket.variants[0].id;
 
         await fetch("/cart/add.js", {
           method: "POST",
@@ -141,17 +159,18 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error("Error adding to cart:", err);
     }
 
-    popup.classList.add("hidden");
+    popup.classList.add("hidden"); // close popup
   });
 
-  // --- EVENT BINDINGS ---
+  // Attach quick-view buttons (one per product card)
   document.querySelectorAll(".quick-view").forEach(btn => {
     btn.addEventListener("click", () => openPopup(btn.dataset.handle));
   });
 
+  // Close popup when clicking "X"
   closeBtn?.addEventListener("click", () => popup.classList.add("hidden"));
 
-  // Close with ESC key
+  // Also close popup when pressing ESC
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && !popup.classList.contains("hidden")) {
       popup.classList.add("hidden");
