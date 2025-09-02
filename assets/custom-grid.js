@@ -200,7 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-// --- Confirmation popup (lightweight) ---
+// --- Confirmation popup  ---
 const cartPopup = document.createElement("div");
 cartPopup.id = "cart-popup";
 cartPopup.style.position = "fixed";
