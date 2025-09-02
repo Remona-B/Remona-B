@@ -103,10 +103,9 @@
 {% endschema %}
 
 <div class="custom-banner">
-  
+  <div class="hamburger">☰</div>
   <!-- Top -->
   <div class="banner-top">
-    <div class="hamburger">☰</div>
     <div class="brand"><b>{{ section.settings.brand_text }}</b></div>
     <div class="topline">{{ section.settings.topline_text }}</div>
     {% if section.settings.button_text != blank %}
@@ -319,11 +318,10 @@
 
   /* Top bar */
   .banner-top {
-    justify-content: center;
-    margin: 0;
-    padding: 8px 0;
-    position: relative;
+    width: 100vw;              /* full viewport width */
+    margin-left: calc(-50vw + 50%); /* cancel parent centering */
     background: #F7F7F7;
+    padding: 12px 0;
   }
 
   .brand {
