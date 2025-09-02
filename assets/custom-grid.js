@@ -159,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Special exam rule: if user chose Black + Medium → also add jacket
       if (
         selectedOptions.color?.toLowerCase() === "black" &&
-        selectedOptions.size?.toLowerCase() === "m"
+        selectedOptions.size?.toLowerCase() === "M"
       ) {
         const jacketHandle = "soft-winter-jacket"; // replace with exact Shopify handle
         const res = await fetch(`/products/${jacketHandle}.js`);
