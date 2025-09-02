@@ -214,7 +214,7 @@ cartPopup.style.fontSize = "14px";
 cartPopup.style.boxShadow = "0 4px 12px rgba(0,0,0,0.3)";
 cartPopup.style.opacity = "0";
 cartPopup.style.transition = "opacity 0.3s ease";
-cartPopup.style.zIndex = "9999";
+cartPopup.style.zIndex = "999";
 document.body.appendChild(cartPopup);
 
 /**
