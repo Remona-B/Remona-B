@@ -146,19 +146,22 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!variantId) return;
 
     try {
+      const addedItems = [];
+
       // Add chosen product
       await fetch("/cart/add.js", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id: variantId, quantity: 1 })
       });
+      addedItems.push(currentProduct.title);
 
       // Special exam rule: if user chose Black + Medium → also add jacket
       if (
         selectedOptions.color?.toLowerCase() === "black" &&
         selectedOptions.size?.toLowerCase() === "medium"
       ) {
-        const jacketHandle = "soft-winter-jacket"; // replace with exact Shopify handle
+        const jacketHandle = "soft-winter-jacket"; 
         const res = await fetch(`/products/${jacketHandle}.js`);
         const jacket = await res.json();
         const jacketVariantId = jacket.variants[0].id;
@@ -168,12 +171,17 @@ document.addEventListener('DOMContentLoaded', () => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ id: jacketVariantId, quantity: 1 })
         });
+        addedItems.push(jacket.title);
       }
+
+      // Show confirmation popup
+      showCartPopup(addedItems);
+
     } catch (err) {
       console.error("Error adding to cart:", err);
     }
 
-    popup.classList.add("hidden"); // close popup
+    popup.classList.add("hidden"); // close product popup
   });
 
   // Attach quick-view buttons (one per product card)
@@ -191,3 +199,47 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+// --- Confirmation popup  ---
+const cartPopup = document.createElement("div");
+cartPopup.id = "cart-popup";
+cartPopup.style.position = "fixed";
+cartPopup.style.top = "50%";
+cartPopup.style.left = "50%";
+cartPopup.style.transform = "translate(-50%, -50%)";
+cartPopup.style.padding = "14px 18px";
+cartPopup.style.background = "#000";
+cartPopup.style.color = "#fff";
+cartPopup.style.borderRadius = "8px";
+cartPopup.style.fontSize = "13px";
+cartPopup.style.boxShadow = "0 4px 12px rgba(0,0,0,0.3)";
+cartPopup.style.opacity = "0";
+cartPopup.style.transition = "opacity 0.3s ease";
+cartPopup.style.zIndex = "999";
+cartPopup.style.textAlign = "center";
+cartPopup.style.maxWidth = "300px";   // smaller width
+cartPopup.style.wordWrap = "break-word";
+document.body.appendChild(cartPopup);
+
+/**
+ * Show confirmation popup
+ * @param {string[]} items - array of item titles added
+ */
+const showCartPopup = (items) => {
+  let message = `
+    <strong>Added to cart:</strong><br>
+    ${items.map(i => `• ${i}`).join("<br>")}
+  `;
+
+  // Check if jacket was added
+  if (items.includes("Soft Winter Jacket")) {
+    message += `<br><br><em>Because you selected <strong>Black + Medium</strong>, the Soft Winter Jacket was added automatically 🎉</em>`;
+  }
+
+  cartPopup.innerHTML = message;
+  cartPopup.style.opacity = "1";
+
+  // Auto-hide after 3 seconds
+  setTimeout(() => {
+    cartPopup.style.opacity = "0";
+  }, 3000);
+};
