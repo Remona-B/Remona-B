@@ -16,26 +16,31 @@
 }
 {% endschema %}
 
+<!-- Load custom font -->
 <link href="https://fonts.googleapis.com/css2?family=Lustria&display=swap" rel="stylesheet">
 
 <section class="custom-grid" data-section-id="{{ section.id }}">
 
-<div class="grid-heading">
-  <h2>Tisso vision in the wild</h2>
-</div>
+  <!-- Section heading -->
+  <div class="grid-heading">
+    <h2>Tisso vision in the wild</h2>
+  </div>
 
-
+  <!-- Product grid loop -->
   <div class="grid">
     {% for block in section.blocks %}
       {% assign product = all_products[block.settings.product] %}
       {% if product %}
+        <!-- Product card -->
         <div class="product-card">
           <div class="product-image-wrap">
             <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.title }}">
+            <!-- Quick view button opens popup -->
             <button class="quick-view" data-handle="{{ product.handle }}">+</button>
           </div>
         </div>
       {% else %}
+        <!-- Placeholder card (if no product selected) -->
         <div class="product-card placeholder" {{ block.shopify_attributes }}>
           <div class="placeholder__img" style="aspect-ratio:1/1;background:#f2f2f2;border-radius:10px;"></div>
           <h3>Pick a product</h3>
@@ -48,15 +53,16 @@
 <!-- Product Popup -->
 <div id="product-popup" class="popup hidden" aria-hidden="true">
   <div class="popup-content" role="dialog" aria-modal="true">
+    <!-- Close button -->
     <button class="close" aria-label="Close">&times;</button>
     
     <div class="popup-grid">
-      <!-- Left: Image -->
+      <!-- Left side: product image -->
       <div class="popup-image-wrap">
         <img id="popup-image" src="" alt="">
       </div>
 
-      <!-- Right: Details -->
+      <!-- Right side: product details -->
       <div class="popup-details">
         <h2 id="popup-title"></h2>
         <p id="popup-description"></p>
@@ -64,9 +70,8 @@
       </div>
     </div>
 
-    <!-- Full width bottom -->
+    <!-- Bottom area: options + add to cart -->
     <div class="popup-bottom">
-      <!-- Options will be injected here -->
       <div id="popup-options"></div>
       <button id="popup-add" class="add-to-cart">ADD TO CART →</button>
     </div>
@@ -74,55 +79,49 @@
 </div>
 
 
-
 <style>
+/* === Section Heading === */
 .grid-heading {
   margin-bottom: 20px;
-  text-align: left; /* ensures it’s left aligned */
+  text-align: left;
 }
-
-.grid-heading h2 {
-  font-family: 'Lustria', serif;
-  font-size: 22px;
-  font-weight: normal; /* not bold */
-  color: #111;
-  margin: 0;
-  margin-left:20px;
-}
-
-
-/* === Grid === */
-.custom-grid .grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 2rem;
-  padding: 15px;
-  
-}
-@media (max-width: 600px) {
-  .custom-grid .grid {
-    grid-template-columns: repeat(2, 1fr); /* 2 columns on mobile */
-    gap: 1rem; /* smaller gap for mobile */
-  }
-  .custom-grid {
-  padding: 15px; /* padding around the whole section */
-}
-
-.grid-heading {
-  margin-bottom: 20px;
-  text-align: center; /* center the heading */
-}
-
 .grid-heading h2 {
   font-family: 'Lustria', serif;
   font-size: 22px;
   font-weight: normal;
   color: #111;
   margin: 0;
-}
+  margin-left:20px;
 }
 
+/* === Product Grid === */
+.custom-grid .grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2rem;
+  padding: 15px;
+}
 
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+  .custom-grid .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  .custom-grid {
+    padding: 15px;
+  }
+  .grid-heading {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .grid-heading h2 {
+    font-size: 22px;
+    margin: 0;
+  }
+}
+
+/* === Product Card === */
 .product-card {
   position: relative;
   overflow: hidden;
@@ -139,6 +138,8 @@
   object-fit: cover;
   display: block;
 }
+
+/* Quick view button (overlay on image) */
 .quick-view {
   position: absolute;
   top: 50%;
@@ -158,11 +159,8 @@
   transition: transform 0.2s ease, background 0.2s ease;
 }
 
-/* === Popup === */
-.popup.hidden {
-  display: none;
-}
-
+/* === Popup Styles === */
+.popup.hidden { display: none; }
 .popup {
   position: fixed;
   top: 0; left: 0;
@@ -173,16 +171,14 @@
   align-items: center;
   z-index: 999;
 }
-
 .popup-content {
   background: #fff;
   padding: 1.5rem;
-  max-width: 300px; /* smaller width */
+  max-width: 300px;
   width: 100%;
   box-shadow: 0 10px 25px rgba(0,0,0,.2);
   position: relative;
 }
-
 .close {
   position: absolute;
   top: 10px; right: 15px;
@@ -192,16 +188,13 @@
   cursor: pointer;
 }
 
-/* grid layout inside popup */
+/* Inside popup layout */
 .popup-grid {
   display: grid;
-  grid-template-columns: 100px 1fr; /* tighter layout */
+  grid-template-columns: 100px 1fr;
   gap: 1rem;
   align-items: flex-start;
 }
-
-/* left side image */
-
 .popup-image-wrap {
   width: 100px;
   aspect-ratio: 1/1;
@@ -210,11 +203,9 @@
 .popup-image-wrap img {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* crop image like product grid */
+  object-fit: cover;
   display: block;
 }
-
-/* right side text */
 .popup-details h2 {
   margin: 0 0 6px;
   font-size: 18px;
@@ -225,14 +216,13 @@
   color: #555;
 }
 
-/* bottom full width */
+/* Bottom part of popup */
 .popup-bottom {
   margin-top: 1rem;
 }
 #popup-options label {
   display: block;
   margin: .5rem 0 .25rem;
-  background:black;
 }
 #popup-options select {
   width: 100%;
@@ -240,7 +230,6 @@
   border: 1px solid #ddd;
   border-radius: 6px;
 }
-
 .add-to-cart {
   display: block;
   width: 100%;
@@ -254,6 +243,25 @@
   cursor: pointer;
 }
 
+/* === Color Button Styling === */
+.color-btn {
+  background-color: #f0f0f0;
+  color: black;
+  padding: 10px 20px;
+  border: none;
+  margin: 5px 0;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  width: 100%;
+  text-align: left;
+}
+.color-btn.selected {
+  background-color: black;
+  color: white;
+  transform: scale(1.05); 
+}
 </style>
 
+<!-- Custom JS file (handles popup) -->
 <script src="{{ 'custom-grid.js' | asset_url }}" defer></script>
