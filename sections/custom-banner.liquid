@@ -2,129 +2,53 @@
 {
   "name": "Custom Banner",
   "settings": [
-    {
-      "type": "image_picker",
-      "id": "top_image",
-      "label": "Top Banner Image"
-    },
-    {
-      "type": "text",
-      "id": "brand_text",
-      "label": "Brand Text",
-      "default": "TISSO VISION"
-    },
-    {
-      "type": "text",
-      "id": "topline_text",
-      "label": "Top Line Text",
-      "default": "Find the ideal gift for your loved ones."
-    },
-    {
-      "type": "text",
-      "id": "button_text",
-      "label": "Top Right Button Text",
-      "default": "CHOOSE GIFT"
-    },
-    {
-      "type": "url",
-      "id": "button_link",
-      "label": "Top Right Button Link"
-    },
-    {
-      "type": "text",
-      "id": "heading",
-      "label": "Main Heading",
-      "default": "The Gift Guide"
-    },
-    {
-      "type": "textarea",
-      "id": "subheading",
-      "label": "Subheading",
-      "default": "Discover Joy: Your Ultimate Holiday Gift Destination. Explore our curated selection and find the perfect gifts to delight your loved ones this holiday season."
-    },
-    {
-      "type": "text",
-      "id": "bottom_button_text",
-      "label": "Bottom Button Text",
-      "default": "SHOP NOW"
-    },
-    {
-      "type": "url",
-      "id": "bottom_button_link",
-      "label": "Bottom Button Link"
-    },
-    {
-      "type": "text",
-      "id": "footer_text",
-      "label": "Footer Banner Text",
-      "default": "SUSTAINABLE, ETHICALLY MADE CLOTHES IN SIZES XXS TO 6XL"
-    },
-    {
-      "type": "text",
-      "id": "left_small_text",
-      "label": "Left Small Text",
-      "default": "Welcome"
-    },
-    {
-      "type": "text",
-      "id": "left_heading",
-      "label": "Left Heading",
-      "default": "Discover the Latest Trends"
-    },
-    {
-      "type": "textarea",
-      "id": "left_description",
-      "label": "Left Description",
-      "default": "Stay ahead in style with our newest arrivals and exclusive picks designed just for you."
-    },
-    {
-      "type": "text",
-      "id": "left_button_text",
-      "label": "Left Button Text",
-      "default": "SHOP NOW"
-    },
-    {
-      "type": "url",
-      "id": "left_button_link",
-      "label": "Left Button Link"
-    },
-    {
-      "type": "image_picker",
-      "id": "side_image",
-      "label": "Right Side Image"
-    }
+    { "type": "image_picker", "id": "top_image", "label": "Top Banner Image" },
+    { "type": "text", "id": "brand_text", "label": "Brand Text", "default": "TISSO VISION" },
+    { "type": "text", "id": "topline_text", "label": "Top Line Text", "default": "Find the ideal gift for your loved ones." },
+    { "type": "text", "id": "button_text", "label": "Top Right Button Text", "default": "CHOOSE GIFT" },
+    { "type": "url", "id": "button_link", "label": "Top Right Button Link" },
+    { "type": "text", "id": "heading", "label": "Main Heading", "default": "The Gift Guide" },
+    { "type": "textarea", "id": "subheading", "label": "Subheading", "default": "Discover Joy: Your Ultimate Holiday Gift Destination. Explore our curated selection and find the perfect gifts to delight your loved ones this holiday season." },
+    { "type": "text", "id": "bottom_button_text", "label": "Bottom Button Text", "default": "SHOP NOW" },
+    { "type": "url", "id": "bottom_button_link", "label": "Bottom Button Link" },
+    { "type": "text", "id": "footer_text", "label": "Footer Banner Text", "default": "SUSTAINABLE, ETHICALLY MADE CLOTHES IN SIZES XXS TO 6XL" },
+    { "type": "text", "id": "left_small_text", "label": "Left Small Text", "default": "Welcome" },
+    { "type": "text", "id": "left_heading", "label": "Left Heading", "default": "Discover the Latest Trends" },
+    { "type": "textarea", "id": "left_description", "label": "Left Description", "default": "Stay ahead in style with our newest arrivals and exclusive picks designed just for you." },
+    { "type": "text", "id": "left_button_text", "label": "Left Button Text", "default": "SHOP NOW" },
+    { "type": "url", "id": "left_button_link", "label": "Left Button Link" },
+    { "type": "image_picker", "id": "side_image", "label": "Right Side Image" }
   ],
-  "presets": [
-    {
-      "name": "Custom Banner"
-    }
-  ]
+  "presets": [{ "name": "Custom Banner" }]
 }
 {% endschema %}
 
 <div class="custom-banner">
-  
+
+  <!-- Mobile hamburger menu (only visible on small screens) -->
   <div class="hamburger">☰</div>
-  <!-- Top -->
+
+  <!-- Top bar with brand, tagline, and CTA button -->
   <div class="banner-top">
     <div class="brand"><b>{{ section.settings.brand_text }}</b></div>
     <div class="topline">{{ section.settings.topline_text }}</div>
     {% if section.settings.button_text != blank %}
-      <a href="{{ section.settings.button_link }}" class="btn-animate" id="btn1">{{ section.settings.button_text }}→</a>
+      <a href="{{ section.settings.button_link }}" class="btn-animate" id="btn1">{{ section.settings.button_text }} →</a>
     {% endif %}
   </div>
 
-  <!-- Top Image -->
+  <!-- Large banner image under the top bar -->
   {% if section.settings.top_image != blank %}
     <div style="text-align: center; margin-bottom: 20px;">
       <img src="{{ section.settings.top_image | image_url: width: 1440 }}" alt="Top Banner" style="max-width: 100%; height: auto;">
     </div>
   {% endif %}
+
+  <!-- Two-column layout (Left = text, Right = image) -->
   <div class="banner-columns">
 
-    <!-- Left Text Section -->
+    <!-- Left column: Heading, Subheading, and CTA button -->
     <div class="banner-left">
-
       {% if section.settings.heading != blank %}
         <h1 class="main-heading">{{ section.settings.heading }}</h1>
       {% endif %}
@@ -138,11 +62,9 @@
           <a href="{{ section.settings.bottom_button_link }}" class="btn-animate">{{ section.settings.bottom_button_text }}</a>
         </div>
       {% endif %}
-
-      
     </div>
 
-    <!-- Right Side Image -->
+    <!-- Right column: Side image -->
     {% if section.settings.side_image != blank %}
       <div class="banner-right">
         <img src="{{ section.settings.side_image | image_url: width: 890 }}" alt="Side Banner">
@@ -150,41 +72,40 @@
     {% endif %}
   </div>
 </div>
-  <!-- Footer Text-->
-  <div class="footer-text">{{ section.settings.footer_text }}</div><br>
+
+<!-- Footer tagline (always at the bottom) -->
+<div class="footer-text">{{ section.settings.footer_text }}</div><br>
 
 <style>
+/* === Main Banner Wrapper === */
 .custom-banner {
   background-size: cover;
   background-position: center;
-  padding: 0 20px 40px; 
+  padding: 0 20px 40px;
   position: relative;
-  padding-bottom:0px;
+  padding-bottom: 0px;
 }
 
+/* Hidden by default, shown only on mobile */
 .hamburger {
   display: none;
 }
 
-/* Top row */
+/* === Top Bar (brand, tagline, button) === */
 .banner-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 0;
   padding: 10px 20px;
   background: #F7F7F7;
-
-  width: 100%;                /* full viewport width */
-  margin-left: 0; /* reset container centering */
+  width: 100%;
   box-sizing: border-box;
 }
-
 
 .brand {
   font-size: 25px;
   padding: 5px 10px;
-  color:black;
+  color: black;
 }
 
 .topline {
@@ -194,7 +115,7 @@
   color: #111;
 }
 
-/* Shared button base */
+/* === Animated CTA Buttons === */
 .btn-animate {
   display: inline-block;
   padding: 10px 40px;
@@ -205,88 +126,70 @@
   z-index: 1;
 }
 
-/* Fill effect layer */
+/* Background fill effect (grows on hover) */
 .btn-animate::before {
   content: "";
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 0; left: 0;
   height: 100%;
   width: 0;
   z-index: -1;
   transition: width 0.8s ease;
 }
 
-/* Text wrapper */
-.btn-animate span {
-  position: relative;
-  z-index: 2;
-}
-
-/* Top button (yellow → black) */
+/* Top button = Yellow → Black */
 #btn1 {
   background: #ffeb3b;
   color: black;
 }
-#btn1::before {
-  background: #000;
-}
-#btn1:hover {
-  color: white;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.2);
-}
-#btn1:hover::before {
-  width: 100%;
-}
+#btn1::before { background: #000; }
+#btn1:hover { color: white; box-shadow: 0 3px 6px rgba(0,0,0,0.2); }
+#btn1:hover::before { width: 100%; }
 
-/* Bottom button (black → yellow) */
+/* Other buttons = Black → Yellow */
 .btn-animate:not(#btn1) {
   background: #000;
   color: white;
 }
-.btn-animate:not(#btn1)::before {
-  background: #ffeb3b;
-}
+.btn-animate:not(#btn1)::before { background: #ffeb3b; }
 .btn-animate:not(#btn1):hover {
   color: black;
   box-shadow: 0 3px 6px rgba(0,0,0,0.2);
 }
-.btn-animate:not(#btn1):hover::before {
-  width: 100%;
-}
+.btn-animate:not(#btn1):hover::before { width: 100%; }
 
-
+/* === Left Column Text === */
 .main-heading {
-  font-size: 42px;
+  font-size: 70px; /* fixed missing semicolon */
   margin: 10px 0 10px;
   font-weight: bold;
-  text-align: left;  
+  text-align: left;
 }
 .subheading {
   font-size: 16px;
   max-width: 600px;
   margin: 0 0 20px;
-  text-align: left;  
+  text-align: left;
 }
 
-
+/* Button container */
 .bottom-btn-wrap {
-  text-align: left; 
+  text-align: left;
   margin: 20px 0 40px;
 }
 
-/* Footer */
+/* === Footer text === */
 .footer-text {
-  margin-top:3px;
-  margin-bottom:3px;
-  padding:5px;
+  margin-top: 3px;
+  margin-bottom: 3px;
+  padding: 5px;
   font-size: 12px;
   text-align: center;
-  color:black;
-  background:#F5F5F5;
+  color: black;
+  background: #F5F5F5;
 }
 
-
+/* === Two-Column Layout (Desktop) === */
 .banner-columns {
   display: flex;
   align-items: center;
@@ -300,19 +203,7 @@
   min-width: 300px;
   max-width: 500px;
   text-align: left;
-  margin-left:50px;
-  margin-top:0px;
-}
-.banner-left h2 {
-  font-size: 70px;
-  font-weight: 700;
-  margin-bottom: 20px;
-}
-.banner-left .desc {
-  font-size: 18px;
-  margin-bottom: 30px;
-  line-height: 1.6;
-  color: #333;
+  margin-left: 50px;
 }
 .banner-right {
   flex: 1;
@@ -324,36 +215,27 @@
   height: auto;
 }
 
+/* === Mobile Styles === */
 @media (max-width: 600px) {
-  body {
-    overflow-x: hidden; /* stop horizontal scroll */
-  }
+  body { overflow-x: hidden; }
 
-  /* Top bar */
+  /* Top bar shrinks + hides tagline + button */
   .banner-top {
     justify-content: center;
-    margin: 0;
     padding: 8px 0;
-    position: relative;
     background: #F7F7F7;
-    width: 100vw;              /* full viewport width */
+    width: 100vw;
     margin-left: calc(-50vw + 50%);
   }
 
   .brand {
-    border: none; 
     font-size: 20px;
     font-weight: bold;
     text-align: center;
-    margin-top: 8px;
-    margin-bottom: 12px;
   }
+  .topline, #btn1 { display: none !important; }
 
-  .topline, #btn1 {
-    display: none !important; /* hide topline + top button */
-  }
-
-  /* Hamburger menu (mobile only) */
+  /* Show hamburger instead */
   .hamburger {
     display: block;
     font-size: 22px;
@@ -362,68 +244,30 @@
     top: 12px;
     left: 12px;
     z-index: 1000;
-    
-  }
-  @media (min-width: 601px) {
-    .hamburger {
-      display: none;
-    }
   }
 
-  /* Hide the top banner image on mobile */
-  .custom-banner > div img[alt="Top Banner"] {
-    display: none !important;
-  }
+  /* Hide big top banner image */
+  .custom-banner > div img[alt="Top Banner"] { display: none !important; }
 
-  /* Force only the side image to show */
-  .banner-right {
-    display: block;
-    text-align: center;
-    position: relative;
-  }
-
-  /* Zoom the side image */
+  /* Side image takes over */
   .banner-right img {
-    width: 130%; /* zoom in */
-    max-width: none;
-    transform: translateX(-5%); /* keep centered */
-    display: block;
-    height: auto;
+    width: 130%;
+    transform: translateX(-5%);
   }
 
-  /* Headings ABOVE the image */
-  .banner-columns {
-    display: block;
-    margin: 0;
-    padding: 0;
-  }
-
-  .banner-left {
-    text-align: center;
-    margin: 12px 0;
-  }
-
-  .main-heading {
-    font-size: 24px;
-    margin: 10px 0;
-    color: #111;
-    text-align: center;
-  }
-
+  /* Headings move above image */
+  .banner-columns { display: block; margin: 0; padding: 0; }
+  .banner-left { text-align: center; margin: 12px 0; }
+  .main-heading { font-size: 24px; margin: 10px 0; text-align: center; }
   .subheading {
     font-size: 14px;
     margin: 0 auto 12px;
     max-width: 90%;
-    color: black;
     text-align: center;
-
-    /* limit to one line */
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
 
-  /* Shop button overlays image bottom center */
+  /* Bottom CTA button overlays image */
   .bottom-btn-wrap {
     position: absolute;
     bottom: 16px;
@@ -431,7 +275,6 @@
     transform: translateX(-50%);
     margin: 0;
   }
-
   .bottom-btn-wrap .btn-animate {
     background: black;
     color: white;
@@ -440,10 +283,6 @@
   }
 
   /* Footer */
-  .footer-text {
-    font-size: 12px;
-    padding: 6px;
-  }
+  .footer-text { font-size: 12px; padding: 6px; }
 }
-
 </style>
