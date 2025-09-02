@@ -316,22 +316,22 @@
 
 @media (max-width: 600px) {
 
-  /* Top bar */
-  .banner-top {
-    justify-content: center;
-    margin: 0;
-    padding: 8px 0;
+    /* Hide the top banner image on mobile */
+  .custom-banner > div img[alt="Top Banner"] {
+    display: none !important;
   }
 
-  .brand {
-    border: none; 
-    font-size: 18px;
-    font-weight: bold;
+  /* Force only the side image to show */
+  .banner-right {
+    display: block;
     text-align: center;
+    position: relative;
   }
 
-  .topline, #btn1 {
-    display: none !important; /* hide topline + top button */
+  .banner-right img {
+    width: 100%;
+    height: auto;
+    display: block;
   }
 
   /* Headings ABOVE the image */
