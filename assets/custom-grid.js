@@ -34,76 +34,81 @@ document.addEventListener('DOMContentLoaded', () => {
       // Clear old option elements
       popupOptions.innerHTML = "";
 
-      // --- Dynamically render product options (Size, Color, etc.) ---
-      product.options.forEach((opt, idx) => {
-        const name = opt.name.toLowerCase();
+      // Shopify convention: option1 = size, option2 = color
+      const sizes = [...new Set(product.variants.map(v => v.option1))];
+      const colors = [...new Set(product.variants.map(v => v.option2))];
 
-        if (name === "color") {
-          // Render colors as swatches
-          const colorWrapper = document.createElement("div");
-          colorWrapper.innerHTML = `<label>Color</label>`;
+      // --- Render color swatches as buttons ---
+      if (colors.length > 0) {
+        const colorWrapper = document.createElement("div");
+        colorWrapper.innerHTML = `<label>Color</label>`;
 
-          const swatchContainer = document.createElement("div");
-          swatchContainer.style.display = "grid";
-          swatchContainer.style.gridTemplateColumns = "1fr 1fr"; // two buttons per row
-          swatchContainer.style.gap = "4px";
+        const swatchContainer = document.createElement("div");
+        swatchContainer.style.display = "grid";
+        swatchContainer.style.gridTemplateColumns = "1fr 1fr"; // two buttons per row
+        swatchContainer.style.gap = "1px";
 
-          let activeColorBtn = null;
+        let activeColorBtn = null; // keep track of selected button
 
-          opt.values.forEach(c => {
-            const btn = document.createElement("button");
-            btn.textContent = c;
-            btn.style.padding = "10px";
-            btn.style.border = "2px solid #ddd";
-            btn.style.borderLeft = `12px solid ${c.toLowerCase()}`;
-            btn.style.background = "#fff";
-            btn.style.color = "#000";
-            btn.style.cursor = "pointer";
-            btn.style.width = "100%";
-            btn.style.textAlign = "left";
-            btn.style.transition = "all 0.3s ease";
+        colors.forEach(c => {
+          const btn = document.createElement("button");
+          btn.textContent = c;
+          btn.style.padding = "10px";
+          btn.style.border = "2px solid #ddd";
+          btn.style.borderLeft = `12px solid ${c.toLowerCase()}`; // mini color preview
+          btn.style.background = "#fff";
+          btn.style.color = "#000";
+          btn.style.cursor = "pointer";
+          btn.style.width = "100%";
+          btn.style.textAlign = "left";
+          btn.style.transition = "all 0.3s ease"; // smooth effect
 
-            btn.onclick = () => {
-              selectedOptions.color = c;
+          // Handle user click
+          btn.onclick = () => {
+            selectedOptions.color = c;
 
-              if (activeColorBtn) {
-                activeColorBtn.style.background = "#fff";
-                activeColorBtn.style.color = "#000";
-                activeColorBtn.style.borderColor = "#ddd";
-              }
+            // reset previous active button
+            if (activeColorBtn) {
+              activeColorBtn.style.background = "#fff";
+              activeColorBtn.style.color = "#000";
+              activeColorBtn.style.borderColor = "#ddd";
+            }
 
-              btn.style.background = "black";
-              btn.style.color = "white";
-              btn.style.borderColor = "black";
-              activeColorBtn = btn;
-            };
+            // highlight current button
+            btn.style.background = "black";
+            btn.style.color = "white";
+            btn.style.borderColor = "black";
 
-            swatchContainer.appendChild(btn);
-          });
+            // update active reference
+            activeColorBtn = btn;
+          };
 
-          colorWrapper.appendChild(swatchContainer);
-          popupOptions.appendChild(colorWrapper);
+          swatchContainer.appendChild(btn);
+        });
 
-          // Preselect first color
-          selectedOptions.color = opt.values[0];
-          swatchContainer.querySelector("button")?.click();
-        }
+        colorWrapper.appendChild(swatchContainer);
+        popupOptions.appendChild(colorWrapper);
 
-        if (name === "size") {
-          // Render sizes as dropdown
-          const sizeWrapper = document.createElement("div");
-          sizeWrapper.innerHTML = `
-            <label>Size</label>
-            <select data-option="size" style="width:100%;padding:10px;border:1px solid #ddd;">
-              ${opt.values.map(s => `<option value="${s}">${s}</option>`).join("")}
-            </select>
-          `;
-          popupOptions.appendChild(sizeWrapper);
+        // Pre-select first color by default
+        selectedOptions.color = colors[0];
+        // Trigger click on first button so it looks selected
+        swatchContainer.querySelector("button")?.click();
+      }
 
-          // Preselect first size
-          selectedOptions.size = opt.values[0];
-        }
-      });
+      // --- Render size dropdown ---
+      if (sizes.length > 1) {
+        const sizeWrapper = document.createElement("div");
+        sizeWrapper.innerHTML = `
+          <label>Size</label>
+          <select data-option="size" style="width:100%;padding:10px;border:1px solid #ddd;">
+            ${sizes.map(s => `<option value="${s}">${s}</option>`).join("")}
+          </select>
+        `;
+        popupOptions.appendChild(sizeWrapper);
+
+        // Pre-select first size
+        selectedOptions.size = sizes[0];
+      }
 
       // Show popup
       popup.classList.remove("hidden");
@@ -118,12 +123,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const getSelectedVariantId = () => {
     if (!currentProduct) return null;
 
-    // Update selectedOptions from dropdowns
+    // Check dropdowns (in case user changed size)
     popupOptions.querySelectorAll("select[data-option]").forEach(s => {
       selectedOptions[s.dataset.option] = s.value;
     });
 
-    // Match variant
+    // Match variant (size + color)
     const variant = currentProduct.variants.find(v =>
       (!selectedOptions.size || v.option1 === selectedOptions.size) &&
       (!selectedOptions.color || v.option2 === selectedOptions.color)
@@ -151,11 +156,10 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       addedItems.push(currentProduct.title);
 
-      // Special exam rule: Medium + Black or Medium + White → add jacket
+      // Special exam rule: if user chose Black + Medium → also add jacket
       if (
-        selectedOptions.size?.toLowerCase() === "medium" &&
-        (selectedOptions.color?.toLowerCase() === "black" ||
-         selectedOptions.color?.toLowerCase() === "white")
+        selectedOptions.color?.toLowerCase() === "black" &&
+        selectedOptions.size?.toLowerCase() === "medium"
       ) {
         const jacketHandle = "soft-winter-jacket"; // replace with exact Shopify handle
         const res = await fetch(`/products/${jacketHandle}.js`);
@@ -200,21 +204,20 @@ document.addEventListener('DOMContentLoaded', () => {
 const cartPopup = document.createElement("div");
 cartPopup.id = "cart-popup";
 cartPopup.style.position = "fixed";
+cartPopup.style.bottom = "20px";
+cartPopup.style.right = "20px";
 cartPopup.style.top = "50%";
 cartPopup.style.left = "50%";
 cartPopup.style.transform = "translate(-50%, -50%)";
-cartPopup.style.padding = "14px 18px";
+cartPopup.style.padding = "16px 20px";
 cartPopup.style.background = "#000";
 cartPopup.style.color = "#fff";
 cartPopup.style.borderRadius = "8px";
-cartPopup.style.fontSize = "13px";
+cartPopup.style.fontSize = "14px";
 cartPopup.style.boxShadow = "0 4px 12px rgba(0,0,0,0.3)";
 cartPopup.style.opacity = "0";
 cartPopup.style.transition = "opacity 0.3s ease";
 cartPopup.style.zIndex = "999";
-cartPopup.style.textAlign = "center";
-cartPopup.style.maxWidth = "300px";
-cartPopup.style.wordWrap = "break-word";
 document.body.appendChild(cartPopup);
 
 /**
@@ -222,21 +225,10 @@ document.body.appendChild(cartPopup);
  * @param {string[]} items - array of item titles added
  */
 const showCartPopup = (items) => {
-  let message = `
+  cartPopup.innerHTML = `
     <strong>Added to cart:</strong><br>
     ${items.map(i => `• ${i}`).join("<br>")}
   `;
-
-  // Add rule explanation if triggered
-  if (
-    selectedOptions.size?.toLowerCase() === "medium" &&
-    (selectedOptions.color?.toLowerCase() === "black" ||
-     selectedOptions.color?.toLowerCase() === "white")
-  ) {
-    message += `<br><br><em>Because you selected <strong>${selectedOptions.color} + Medium</strong>, the Soft Winter Jacket was added automatically 🎉</em>`;
-  }
-
-  cartPopup.innerHTML = message;
   cartPopup.style.opacity = "1";
 
   // Auto-hide after 3 seconds
