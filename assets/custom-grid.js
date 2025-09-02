@@ -199,25 +199,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
-
 // --- Confirmation popup  ---
 const cartPopup = document.createElement("div");
 cartPopup.id = "cart-popup";
 cartPopup.style.position = "fixed";
-cartPopup.style.bottom = "20px";
-cartPopup.style.right = "20px";
 cartPopup.style.top = "50%";
 cartPopup.style.left = "50%";
 cartPopup.style.transform = "translate(-50%, -50%)";
-cartPopup.style.padding = "16px 20px";
+cartPopup.style.padding = "14px 18px";
 cartPopup.style.background = "#000";
 cartPopup.style.color = "#fff";
 cartPopup.style.borderRadius = "8px";
-cartPopup.style.fontSize = "14px";
+cartPopup.style.fontSize = "13px";
 cartPopup.style.boxShadow = "0 4px 12px rgba(0,0,0,0.3)";
 cartPopup.style.opacity = "0";
 cartPopup.style.transition = "opacity 0.3s ease";
 cartPopup.style.zIndex = "999";
+cartPopup.style.textAlign = "center";
+cartPopup.style.maxWidth = "300px";   // smaller width
+cartPopup.style.wordWrap = "break-word";
 document.body.appendChild(cartPopup);
 
 /**
@@ -225,10 +225,17 @@ document.body.appendChild(cartPopup);
  * @param {string[]} items - array of item titles added
  */
 const showCartPopup = (items) => {
-  cartPopup.innerHTML = `
+  let message = `
     <strong>Added to cart:</strong><br>
     ${items.map(i => `• ${i}`).join("<br>")}
   `;
+
+  // Check if jacket was added
+  if (items.includes("Soft Winter Jacket")) {
+    message += `<br><br><em>Because you selected <strong>Black + Medium</strong>, the Soft Winter Jacket was added automatically 🎉</em>`;
+  }
+
+  cartPopup.innerHTML = message;
   cartPopup.style.opacity = "1";
 
   // Auto-hide after 3 seconds
